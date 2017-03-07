@@ -8,7 +8,8 @@
 
 namespace uv
 {
-	typedef std::function <void()> Callback;
+	typedef std::function<void()> Callback;
+	typedef std::function<void(error)> CallbackWithResult;
 
 	namespace internal
 	{
@@ -16,6 +17,7 @@ namespace uv
 		{
 			uv_cid_close = 0,
 			uv_cid_listen,
+			uv_cid_tcp,
 			uv_cid_timer,
 			uv_cid_max,
 		};
@@ -84,7 +86,7 @@ namespace uv
 	{
 	public:
 		callbacks():
-			m_lut(internal::uv_cid_max)
+			m_lut(internal::uv_cid_max) //这里uv_cid_max 确保任何类型都可以装载
 		{}
 
 		callbacks(int max):
@@ -95,7 +97,7 @@ namespace uv
 		template<typename callback_T>
 		static void store(void* target, int cid, const callback_T& callback, void* data = nullptr)
 		{
-			return reinterpret_cast<callbacks *>(target)->m_lut[cid] = \
+			reinterpret_cast<callbacks *>(target)->m_lut[cid] = \
 				callback_object_ptr(new internal::callback_object<callback_T>(callback, data));
 		}
 
@@ -109,11 +111,11 @@ namespace uv
 		template<typename callback_T, typename ...arg_T>
 		static typename std::result_of<callback_T(arg_T...)>::type invoke(void* target, int cid, arg_T&&... args)
 		{
+			//获取unique_ptr里面的callback_object_base类
 			auto dest = dynamic_cast<internal::callback_object<callback_T>*>(\
-				reinterpret_cast<callbacks*>(target)->m_lut[cid].get();
+				reinterpret_cast<callbacks*>(target)->m_lut[cid].get());
 			assert(dest);
-			
-			return dest->invoke(std::forward<arg_T>(args ...));
+			return dest->invoke(std::forward<arg_T>(args)...);
 		}
 
 	private:

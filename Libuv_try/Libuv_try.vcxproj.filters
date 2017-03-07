@@ -16,8 +16,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="error.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="handle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="free_handle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="callback.hpp">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="loop.hpp">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
