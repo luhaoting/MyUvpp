@@ -22,12 +22,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="callback.hpp" />
-    <ClInclude Include="error.hpp" />
-    <ClInclude Include="free_handle.hpp" />
-    <ClInclude Include="handle.hpp" />
-    <ClInclude Include="loop.hpp" />
-    <ClInclude Include="timer.hpp" />
+    <ClInclude Include="Common\callback.hpp" />
+    <ClInclude Include="Common\error.hpp" />
+    <ClInclude Include="Common\free_handle.hpp" />
+    <ClInclude Include="Common\handle.hpp" />
+    <ClInclude Include="Common\loop.hpp" />
+    <ClInclude Include="Common\timer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F6BD6D5-C25A-40B1-B958-64EF60D97113}</ProjectGuid>

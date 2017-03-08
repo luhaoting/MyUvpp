@@ -14,8 +14,8 @@
 */
 
 
-#include "loop.hpp"
-#include "timer.hpp"
+#include "uvpp/loop.hpp"
+#include "uvpp/timer.hpp"
 
 static void PrintPoint(uv_timer_t* t)
 {
@@ -49,24 +49,28 @@ int main()
 	//std::cout << ci << std::endl;
 	//std::cout << i << std::endl;
 
-	uv_loop_t *loop = uv_default_loop();
+	//uv_loop_t *loop = uv_default_loop();
+	//uv_timer_t *timer = new uv_timer_t();
+	//uv_timer_init(loop, timer);							//初始化定时器
+	//uv_timer_start(timer, PrintPoint, 10000, /*1000*/0);	//设定10s定时器,每1s重复一次
+	////uv_timer_set_repeat(&timer, 1000);					//设定次定时器执行之后,每1s重复一次
+	//
+	//uv_run(loop, UV_RUN_DEFAULT);
+	//free(timer);  
+	//uv_loop_close(loop);
+	//free(loop);
+	//timer 
 
-	uv_timer_t *timer = new uv_timer_t();
-	uv_timer_init(loop, timer);					//初始化定时器
-	uv_timer_start(timer, PrintPoint, 10000, /*1000*/0);	//设定10s定时器,每1s重复一次
-	//uv_timer_set_repeat(&timer, 1000);				//设定次定时器执行之后,每1s重复一次
-	
-	uv_run(loop, UV_RUN_DEFAULT);
-	free(timer);
-	uv_loop_close(loop);
-	free(loop);
 
+	//这种构造方式 会在uv-common.c line：635 崩溃。原因：handle在loop之前被free loop的销毁处理会出错
+	//uv::Loop loop;
 	//uv::Timer timer;
 
-	//uv::Loop loop;
-	//timer.Init(loop);
-	//std::chrono::duration<int, std::milli> time(1000);
-	//timer.start([]() {std::cout << " ." << std::endl; }, time);
-	//loop.run();
+	uv::Timer timer; 
+	uv::Loop loop;
+	timer.Init(loop);
+	std::chrono::duration<int, std::milli> time(1000);
+	timer.start([]() {std::cout << " ." << std::endl; }, time);
+	loop.run();
 	return 0;
 }
