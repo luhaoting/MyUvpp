@@ -22,12 +22,13 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\callback.hpp" />
-    <ClInclude Include="Common\error.hpp" />
-    <ClInclude Include="Common\free_handle.hpp" />
-    <ClInclude Include="Common\handle.hpp" />
-    <ClInclude Include="Common\loop.hpp" />
-    <ClInclude Include="Common\timer.hpp" />
+    <ClInclude Include="..\uvpp\callback.hpp" />
+    <ClInclude Include="..\uvpp\error.hpp" />
+    <ClInclude Include="..\uvpp\free_handle.hpp" />
+    <ClInclude Include="..\uvpp\handle.hpp" />
+    <ClInclude Include="..\uvpp\loop.hpp" />
+    <ClInclude Include="..\uvpp\stream.hpp" />
+    <ClInclude Include="..\uvpp\timer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F6BD6D5-C25A-40B1-B958-64EF60D97113}</ProjectGuid>
@@ -115,7 +116,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\uvpp;$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

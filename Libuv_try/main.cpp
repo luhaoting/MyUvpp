@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <iostream>
 #include <thread>
+
 /*
 #pragma comment(lib,"Ws2_32.lib") 
 #pragma comment(lib,"Psapi.lib") 
@@ -14,8 +15,8 @@
 */
 
 
-#include "uvpp/loop.hpp"
-#include "uvpp/timer.hpp"
+#include "loop.hpp"
+#include "timer.hpp"
 
 static void PrintPoint(uv_timer_t* t)
 {

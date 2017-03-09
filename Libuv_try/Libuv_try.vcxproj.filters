@@ -16,22 +16,25 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\callback.hpp">
+    <ClInclude Include="..\uvpp\callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\error.hpp">
+    <ClInclude Include="..\uvpp\error.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\free_handle.hpp">
+    <ClInclude Include="..\uvpp\free_handle.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\handle.hpp">
+    <ClInclude Include="..\uvpp\handle.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\loop.hpp">
+    <ClInclude Include="..\uvpp\loop.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\timer.hpp">
+    <ClInclude Include="..\uvpp\stream.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\timer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
