@@ -7,10 +7,10 @@
 namespace uv
 {
 	template<typename handle_T>
-	class handle
+	class Handle
 	{
 	protected:
-		handle():
+		Handle():
 			m_uv_handle(new handle_T())
 			,m_will_close(false)
 		{
@@ -21,7 +21,7 @@ namespace uv
 		}
 
 		//移动构造函数
-		handle(handle_T&& other) :
+		Handle(handle_T&& other) :
 			m_uv_handle(other.m_uv_handle),
 			m_will_close(other.m_will_close)
 		{
@@ -29,7 +29,7 @@ namespace uv
 			other.m_will_close = false;
 		}
 
-		handle& operator= (handle&& other)
+		Handle& operator= (Handle&& other)
 		{
 			if (this == &other)
 			{
@@ -43,7 +43,7 @@ namespace uv
 			return *this;
 		}
 
-		virtual ~handle()
+		virtual ~Handle()
 		{
 			if (!m_will_close) //这里也丑陋
 			{
@@ -84,7 +84,7 @@ namespace uv
 			uv_close(get<uv_handle_t>(),
 				[](uv_handle_t* h)
 			{
-				callbacks::invoke<decltype(cb)>(handle->data, internal::uv_cid_close);
+				callbacks::invoke<decltype(cb)>(Handle->data, internal::uv_cid_close);
 				free_handle(&h);
 			}
 			);

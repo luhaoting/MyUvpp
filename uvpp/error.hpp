@@ -7,18 +7,18 @@
 
 namespace uv
 {
-	class exception : public std::runtime_error
+	class Exception : public std::runtime_error
 	{
 	public:
-		exception(const std::string & msg):
+		Exception(const std::string & msg):
 			std::runtime_error(msg)
 		{}
 	};
 
-	class error
+	class Error
 	{
 	public:
-		error(int c):
+		Error(int c):
 			m_error(c)
 		{}
 	public:

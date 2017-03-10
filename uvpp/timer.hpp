@@ -8,7 +8,7 @@
 
 namespace uv {
 
-	class Timer : public handle<uv_timer_t>
+	class Timer : public Handle<uv_timer_t>
 	{
 	public:
 		//Timer() :
@@ -27,32 +27,32 @@ namespace uv {
 			uv_timer_init(l.get(), get());
 		}
 
-		error start(std::function<void()> callback, const std::chrono::duration<uint64_t, std::milli>& timeout, const std::chrono::duration<uint64_t, std::milli> &repeat)
+		Error start(std::function<void()> callback, const std::chrono::duration<uint64_t, std::milli>& timeout, const std::chrono::duration<uint64_t, std::milli> &repeat)
 		{
 			//封装方法
-			callbacks::store(get()->data, internal::uv_cid_timer, callback);
+			callbacks::store(get()->data, internal::eUVCallbackIdTimer, callback);
 			//调用方法
-			return error(uv_timer_start(get(), [](uv_timer_t* handle) {callbacks::invoke<decltype(callback)>(handle->data, internal::uv_cid_timer); },
+			return Error(uv_timer_start(get(), [](uv_timer_t* Handle) {callbacks::invoke<decltype(callback)>(Handle->data, internal::eUVCallbackIdTimer); },
 				timeout.count(),
 				repeat.count()));
 		}
 
-		error start(std::function<void()> callback, const std::chrono::duration<uint64_t, std::milli>& timeout)
+		Error start(std::function<void()> callback, const std::chrono::duration<uint64_t, std::milli>& timeout)
 		{
-			callbacks::store(get()->data, internal::uv_cid_timer, callback);
-			return error(uv_timer_start(get(), 
-						[](uv_timer_t* handle) {callbacks::invoke<decltype(callback)>(handle->data, internal::uv_cid_timer); },
+			callbacks::store(get()->data, internal::eUVCallbackIdTimer, callback);
+			return Error(uv_timer_start(get(), 
+						[](uv_timer_t* Handle) {callbacks::invoke<decltype(callback)>(Handle->data, internal::eUVCallbackIdTimer); },
 						timeout.count(), 0));
 		}
 
-		error stop()
+		Error stop()
 		{
-			return error(uv_timer_stop(get()));
+			return Error(uv_timer_stop(get()));
 		}
 
-		error again()
+		Error again()
 		{
-			return error(uv_timer_again(get()));
+			return Error(uv_timer_again(get()));
 		}
 	};
 }

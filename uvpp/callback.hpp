@@ -9,17 +9,23 @@
 namespace uv
 {
 	typedef std::function<void()> Callback;
-	typedef std::function<void(error)> CallbackWithResult;
+	typedef std::function<void(Error)> CallbackWithResult;
 
 	namespace internal
 	{
-		enum uv_callback_id
+		enum EUVCallbackId
 		{
-			uv_cid_close = 0,
-			uv_cid_listen,
-			uv_cid_tcp,
-			uv_cid_timer,
-			uv_cid_max,
+			eUvCallbackIdClose = 0,
+			eUVCallbackIdListen,
+			eUVCallbackIdReadStart,
+			eUVCallbackIdWrite,
+			eUVCallbackIdConnect,
+			eUVCallbackIdAccept,
+
+			eUVCallbackIdTcp,
+			eUVCallbackIdTimer,
+
+			eUVCallbackIdEnd,
 		};
 
 		//回调基类
@@ -86,7 +92,7 @@ namespace uv
 	{
 	public:
 		callbacks():
-			m_lut(internal::uv_cid_max) //这里uv_cid_max 确保任何类型都可以装载
+			m_lut(internal::eUVCallbackIdEnd) //这里uv_cid_max 确保任何类型都可以装载
 		{}
 
 		callbacks(int max):
