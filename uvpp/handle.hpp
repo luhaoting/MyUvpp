@@ -77,14 +77,14 @@ namespace uv
 				return;
 			}
 			
-			callbacks::store(get()->data, internal::uv_cid_close, cb);// 回调压入结构
+			callbacks::store(get()->data, internal::eUvCallbackIdClose, cb);// 回调压入结构
 			m_will_close = true;
 			
 			//调用
 			uv_close(get<uv_handle_t>(),
 				[](uv_handle_t* h)
 			{
-				callbacks::invoke<decltype(cb)>(Handle->data, internal::uv_cid_close);
+				callbacks::invoke<decltype(cb)>(h->data, internal::eUvCallbackIdClose);
 				free_handle(&h);
 			}
 			);

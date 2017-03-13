@@ -63,15 +63,24 @@ int main()
 	//timer 
 
 
-	//这种构造方式 会在uv-common.c line：635 崩溃。原因：handle在loop之前被free loop的销毁处理会出错
+	//  int uv_loop_close(uv_loop_t* loop)
+    //  释放所有的循环内部的资源。只能在loop完成运行并且所有打开的handle以及requests已经被关闭，
+	//	否则会返回UV_EBUSY。当本函数返回之后，用户可以释放为loop分配的内存了
+
+	//这种构造方式 会在uv-common.c line：635 崩溃。原因：handle在loop之前被free loop的销毁处理会出错 
 	//uv::Loop loop;
 	//uv::Timer timer;
+	//加入handle::close();就不会了
+	
 
-	uv::Timer timer; 
 	uv::Loop loop;
+	uv::Timer timer; 
+
 	timer.Init(loop);
 	std::chrono::duration<int, std::milli> time(1000);
 	timer.start([]() {std::cout << " ." << std::endl; }, time);
 	loop.run();
+
+	timer.close();
 	return 0;
 }
