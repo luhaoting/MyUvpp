@@ -87,5 +87,25 @@ namespace uv {
 		{
 			return read_start<0>(callback);
 		}
+
+		bool read_stop()
+		{
+			return uv_read_stop(Handle<handle_T>::template get<uv_stream_t>()) == 0;
+		}
+
+		bool write(const char* buf, ssize_t len, CallbackWithResult callback)
+		{
+			//用 buf 初始化 uv_buf_t
+			uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf.c_str()), buf.length() } };
+
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
+
+			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1, 
+				[](uv_write_t* req, int status)
+			{
+				std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
+				callbacks::invoke<decltype(callback)>(req->handle->data, uv::internal::eUVCallbackIdWrite, error(status));
+			}) == 0;
+		}
 	};
 }
