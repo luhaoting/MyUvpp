@@ -52,7 +52,7 @@ namespace uv {
 
 				// handle callback throwing exception: hold data in unique_ptr
 				std::shared_ptr<char> baseHolder(buf->base, std::default_delete<char[]>());
-				使用 shared_ptr 保护异常时的栈数据不丢失
+				猜测是使用 shared_ptr 保护异常时的栈数据不丢失
 				*/
 
 				if (nread < 0)
@@ -93,10 +93,11 @@ namespace uv {
 			return uv_read_stop(Handle<handle_T>::template get<uv_stream_t>()) == 0;
 		}
 
+		//重载了多个write。。
 		bool write(const char* buf, ssize_t len, CallbackWithResult callback)
 		{
 			//用 buf 初始化 uv_buf_t
-			uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf.c_str()), buf.length() } };
+			uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf), buf.length() } };
 
 			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
 
@@ -105,6 +106,30 @@ namespace uv {
 			{
 				std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
 				callbacks::invoke<decltype(callback)>(req->handle->data, uv::internal::eUVCallbackIdWrite, error(status));
+			}) == 0;
+		}
+
+		bool write(const std::vector<char> buf, CallbackWithResult callback)
+		{
+			uv_buf_t bufs[] = { uv_buf_t {const_cast<char*>(&buf[0], buf.size()), } }	//vector 可以这样强转 char* 啊!!
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
+			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1,
+				[](uv_write_t* req, int status)
+			{
+				std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
+				callbacks::invoke<decltype(callback)>(req->handle->data, uv::internal::eUVCallbackIdWrite, error(status));
+			}) == 0;
+		}
+
+		bool write(const string& buf, CallbackWithResult callback)
+		{
+			uv_buf_t bufs[] = { uv_buf_t{ const_cast<char*>(buf.c_str(), buf.size()), } }
+
+			callbacks::store(handle<HANDLE_T>::get()->data, uvpp::internal::uv_cid_write, callback);
+			return uv_write(new uv_write_t, handle<HANDLE_T>::template get<uv_stream_t>(), bufs, 1, [](uv_write_t* req, int status)
+			{
+				std::unique_ptr<uv_write_t> reqHolder(req);
+				callbacks::invoke<decltype(callback)>(req->handle->data, uvpp::internal::uv_cid_write, error(status));
 			}) == 0;
 		}
 	};

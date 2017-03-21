@@ -37,5 +37,8 @@
     <ClInclude Include="..\uvpp\timer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="tcp.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
