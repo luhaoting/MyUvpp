@@ -40,5 +40,8 @@
     <ClInclude Include="tcp.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="net.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

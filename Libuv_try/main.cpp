@@ -17,6 +17,7 @@
 
 #include "loop.hpp"
 #include "timer.hpp"
+#include "tcp.hpp"
 
 static void PrintPoint(uv_timer_t* t)
 {
@@ -74,13 +75,15 @@ int main()
 	
 
 	uv::Loop loop;
-	uv::Timer timer; 
+	uv::Timer timer(loop); 
+	uv::Tcp tcp(loop);
 
-	timer.Init(loop);
 	std::chrono::duration<int, std::milli> time(1000);
 	timer.start([]() {std::cout << " ." << std::endl; }, time);
 	loop.run();
 
+
 	timer.close();
+	tcp.close();
 	return 0;
 }

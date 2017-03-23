@@ -19,12 +19,15 @@ namespace uv
 			eUVCallbackIdListen,
 			eUVCallbackIdReadStart,
 			eUVCallbackIdWrite,
+			eUVCallbackIdShutdown,
 			eUVCallbackIdConnect,
+			eUVCallbackIdConnect6,
 			eUVCallbackIdAccept,
 
 			eUVCallbackIdTcp,
 			eUVCallbackIdTimer,
 
+			
 			eUVCallbackIdEnd,
 		};
 

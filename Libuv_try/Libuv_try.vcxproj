@@ -29,6 +29,7 @@
     <ClInclude Include="..\uvpp\loop.hpp" />
     <ClInclude Include="..\uvpp\stream.hpp" />
     <ClInclude Include="..\uvpp\timer.hpp" />
+    <ClInclude Include="net.hpp" />
     <ClInclude Include="tcp.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
