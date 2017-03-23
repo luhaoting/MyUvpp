@@ -13,7 +13,7 @@ namespace uv {
 		{
 			uv_tcp_init(uv_default_loop(), get());
 		}
-		
+
 		Tcp(Loop& loop) :
 			Stream()
 		{
@@ -22,36 +22,36 @@ namespace uv {
 
 		bool nodelay(bool enable)
 		{
-			uv_tcp_nodelay(get(), enable);
+			uv_tcp_nodelay(get(), enable ? 1 : 0) == 0;
 		}
 
-		bool keep_alive(bool enable, int delay)
+		bool keep_alive(bool enable, unsigned int delay)
 		{
-			return uv_tcp_keepalive(get(), enable, delay) == 0;
+			return uv_tcp_keepalive(get(), enable ? 1 : 0, delay) == 0;
 		}
 
 		bool simultanious_accept(bool enable)
 		{
-			return uv_tcp_simultaneous_accepts(get(), enable) == 0;
+			return uv_tcp_simultaneous_accepts(get(), enable ? 1 : 0) == 0;
 		}
 
 		bool bind(const std::string& ip, const int port)
 		{
-			ip4_addr ip4 = to_ip4_addr(ip, port);
-			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&ip4), 0) == 0;
+			ip4_addr addr = to_ip4_addr(ip, port);
+			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&addr), 0) == 0;
 		}
 
 		bool bind6(const std::string& ip, const int port)
 		{
-			ip6_addr ip6 = to_ip6_addr(ip, port);
-			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&ip6), 0) == 0;
+			ip6_addr addr = to_ip6_addr(ip, port);
+			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&addr), 0) == 0;
 		}
 
 		bool connect(const std::string& ip, const int port, CallbackWithResult callback)
 		{
-			callbacks::store(get(), internal::eUVCallbackIdConnect, callback);
+			callbacks::store(get()->data, internal::eUVCallbackIdConnect, callback);
 			ip4_addr ip4 = to_ip4_addr(ip, port);
-			return uv_tcp_connect(new uv_connect_t(),get(), reinterpret_cast<sockaddr*>(&ip4),
+			return uv_tcp_connect(new uv_connect_t(), get(), reinterpret_cast<sockaddr*>(&ip4),
 				[](uv_connect_t* req, int status)
 			{
 				std::unique_ptr<uv_connect_t> reqHolder(req);
@@ -61,7 +61,7 @@ namespace uv {
 
 		bool connect6(const std::string& ip, const int port, CallbackWithResult callback)
 		{
-			callbacks::store(get(), internal::eUVCallbackIdConnect6, callback);
+			callbacks::store(get()->data, internal::eUVCallbackIdConnect6, callback);
 			ip6_addr ip6 = to_ip6_addr(ip, port);
 			return uv_tcp_connect(new uv_connect_t(), get(), reinterpret_cast<sockaddr*>(&ip6),
 				[](uv_connect_t* req, int status)
@@ -101,9 +101,9 @@ namespace uv {
 				{
 					return from_ip4_addr(reinterpret_cast<ip4_addr*>(&addr), ip, port);
 				}
-				else 
-				{ 
-					return from_ip6_addr(reinterpret_cast<ip6_addr*>(&addr), ip, port); 
+				else
+				{
+					return from_ip6_addr(reinterpret_cast<ip6_addr*>(&addr), ip, port);
 				}
 			}
 			return false;
