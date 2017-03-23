@@ -1,3 +1,5 @@
+#pragma once
+
 #include "callback.hpp"
 
 namespace uv

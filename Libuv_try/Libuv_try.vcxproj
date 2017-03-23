@@ -27,10 +27,10 @@
     <ClInclude Include="..\uvpp\free_handle.hpp" />
     <ClInclude Include="..\uvpp\handle.hpp" />
     <ClInclude Include="..\uvpp\loop.hpp" />
+    <ClInclude Include="..\uvpp\net.hpp" />
     <ClInclude Include="..\uvpp\stream.hpp" />
+    <ClInclude Include="..\uvpp\tcp.hpp" />
     <ClInclude Include="..\uvpp\timer.hpp" />
-    <ClInclude Include="net.hpp" />
-    <ClInclude Include="tcp.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F6BD6D5-C25A-40B1-B958-64EF60D97113}</ProjectGuid>

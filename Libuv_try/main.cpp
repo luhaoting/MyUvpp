@@ -42,6 +42,7 @@ void g(T& val)
 	val = 99;
 }
 
+
 int main() 
 {
 	//int&& rVal = getVal();	//”“÷µ“˝”√
@@ -77,6 +78,8 @@ int main()
 	uv::Loop loop;
 	uv::Timer timer(loop); 
 	uv::Tcp tcp(loop);
+
+	tcp.bind("127.0.0.1",9123);
 
 	std::chrono::duration<int, std::milli> time(1000);
 	timer.start([]() {std::cout << " ." << std::endl; }, time);

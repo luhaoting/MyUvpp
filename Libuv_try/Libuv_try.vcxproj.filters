@@ -37,10 +37,10 @@
     <ClInclude Include="..\uvpp\timer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="tcp.hpp">
+    <ClInclude Include="..\uvpp\net.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="net.hpp">
+    <ClInclude Include="..\uvpp\tcp.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

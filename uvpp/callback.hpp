@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <functional>
 #include <memory>
-
+#include "error.hpp"
 
 namespace uv
 {

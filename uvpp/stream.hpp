@@ -1,3 +1,5 @@
+#pragma once
+
 #include "error.hpp"
 #include <algorithm>
 #include <memory>
