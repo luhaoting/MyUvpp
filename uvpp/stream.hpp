@@ -17,12 +17,12 @@ namespace uv {
 	public:
 		bool listen(CallbackWithResult callback, int backlog = 128)//默认listen队列128
 		{
-			callbacks::store(Handle<handle_T>::getHandle()->data, internal::eUVCallbackIdListen, callback);
+			callbacks::store(Handle<handle_T>::get()->data, internal::eUVCallbackIdListen, callback);
 			/*这个写法第一次看到, 继承类是模板类的时候 调用父类的模板方法
 			*
 			* BaseClass<class_T>::template m_Func<func_T>();
 			*/
-			return uv_listen(Handle<handle_T>::template getHandle<uv_stream_t>(), backlog,
+			return uv_listen(Handle<handle_T>::template get<uv_stream_t>(), backlog,
 				[](uv_stream_t* s, int status)
 			{
 				callbacks::invoke<decltype(callback)>(s->data, uv::internal::eUVCallbackIdListen, Error(status));
@@ -31,15 +31,15 @@ namespace uv {
 
 		bool accept(Stream& client)
 		{
-			return uv_accept(Handle<T>::template getHandle<uv_stream_t>(), client.Handle<T>::template getHandle<uv_stream_t>()) == 0;
+			return uv_accept(Handle<T>::template get<uv_stream_t>(), client.Handle<T>::template get<uv_stream_t>()) == 0;
 		}
 
 		template <int max_alloc_size>
 		bool read_start(std::function<void(const char* buff, ssize_t len)> callback)
 		{
-			callbacks::store(Handle<handle_T>::getHandle()->data, uv::internal::eUVCallbackIdReadStart, callback);
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdReadStart, callback);
 			
-			return uv_read_start(Handle<handle_T>::template getHandle<uv_stream_t>(), 
+			return uv_read_start(Handle<handle_T>::template get<uv_stream_t>(), 
 				[](uv_handle_t*, size_t suggested_size, uv_buf_t* buf)/*uv_readstart_cb*/
 			{
 				assert(buf);
@@ -101,7 +101,7 @@ namespace uv {
 			//用 buf 初始化 uv_buf_t
 			uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf), buf.length() } };
 
-			callbacks::store(Handle<handle_T>::getHandle()->data, uv::internal::eUVCallbackIdWrite, callback);
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
 			
 			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1, 
 				[](uv_write_t* req, int status)
@@ -115,7 +115,7 @@ namespace uv {
 		{
 			uv_buf_t bufs[] = { uv_buf_t {const_cast<char*>(&buf[0], buf.size()), } }	//vector 可以这样强转 char* 啊!!
 
-			callbacks::store(Handle<handle_T>::getHandle()->data, uv::internal::eUVCallbackIdWrite, callback);
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
 
 			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1,
 				[](uv_write_t* req, int status)
@@ -141,7 +141,7 @@ namespace uv {
 
 		bool shutdown(CallbackWithResult callback)
 		{
-			callbacks::store(Handle<handle_T>::getHandle()->data, uv::internal.eUVCallbackIdShutdown, callback);
+			callbacks::store(Handle<handle_T>::get()->data, uv::internal.eUVCallbackIdShutdown, callback);
 			return uv_shutdown(new uv_shutdown_t, Handle<handle_T>::template get<uv_stream_t>(), 
 				[](uv_shutdown_t* req, int status)
 			{

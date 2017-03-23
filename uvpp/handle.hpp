@@ -53,13 +53,13 @@ namespace uv
 
 	public:
 		template<typename T = handle_T>
-		T* getHandle()
+		T* get()
 		{
 			return reinterpret_cast<T*>(m_uv_handle);
 		}
 
 		template<typename T = handle_T>
-		const T* getHandle() const
+		const T* get() const
 		{
 			return reinterpret_cast<const T*>(m_uv_handle);
 		}
@@ -71,17 +71,17 @@ namespace uv
 
 		void close(Callback cb = [] {}) //关闭的默认回调为空
 		{
-			if(uv_is_closing(getHandle<uv_handle_t>()))
+			if(uv_is_closing(get<uv_handle_t>()))
 			{
 				//防止多次关闭
 				return;
 			}
 			
-			callbacks::store(getHandle()->data, internal::eUvCallbackIdClose, cb);// 回调压入结构
+			callbacks::store(get()->data, internal::eUvCallbackIdClose, cb);// 回调压入结构
 			m_will_close = true;
 			
 			//调用
-			uv_close(getHandle<uv_handle_t>(),
+			uv_close(get<uv_handle_t>(),
 				[](uv_handle_t* h)
 			{
 				callbacks::invoke<decltype(cb)>(h->data, internal::eUvCallbackIdClose);

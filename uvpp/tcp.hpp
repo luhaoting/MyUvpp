@@ -11,47 +11,47 @@ namespace uv {
 		Tcp() :
 			Stream()
 		{
-			uv_tcp_init(uv_default_loop(), getHandle());
+			uv_tcp_init(uv_default_loop(), get());
 		}
 		
 		Tcp(Loop& loop) :
 			Stream()
 		{
-			uv_tcp_init(loop.get(), getHandle());
+			uv_tcp_init(loop.get(), get());
 		}
 
 		bool nodelay(bool enable)
 		{
-			uv_tcp_nodelay(getHandle(), enable);
+			uv_tcp_nodelay(get(), enable);
 		}
 
 		bool keep_alive(bool enable, int delay)
 		{
-			return uv_tcp_keepalive(getHandle(), enable, delay) == 0;
+			return uv_tcp_keepalive(get(), enable, delay) == 0;
 		}
 
 		bool simultanious_accept(bool enable)
 		{
-			return uv_tcp_simultaneous_accepts(getHandle(), enable) == 0;
+			return uv_tcp_simultaneous_accepts(get(), enable) == 0;
 		}
 
 		bool bind(const std::string& ip, const int port)
 		{
 			ip4_addr ip4 = to_ip4_addr(ip, port);
-			return uv_tcp_bind(getHandle(), reinterpret_cast<sockaddr*>(&ip4), 0) == 0;
+			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&ip4), 0) == 0;
 		}
 
 		bool bind6(const std::string& ip, const int port)
 		{
 			ip6_addr ip6 = to_ip6_addr(ip, port);
-			return uv_tcp_bind(getHandle(), reinterpret_cast<sockaddr*>(&ip6), 0) == 0;
+			return uv_tcp_bind(get(), reinterpret_cast<sockaddr*>(&ip6), 0) == 0;
 		}
 
 		bool connect(const std::string& ip, const int port, CallbackWithResult callback)
 		{
-			callbacks::store(getHandle(), internal::eUVCallbackIdConnect, callback);
+			callbacks::store(get(), internal::eUVCallbackIdConnect, callback);
 			ip4_addr ip4 = to_ip4_addr(ip, port);
-			return uv_tcp_connect(new uv_connect_t(),getHandle(), reinterpret_cast<sockaddr*>(&ip4),
+			return uv_tcp_connect(new uv_connect_t(),get(), reinterpret_cast<sockaddr*>(&ip4),
 				[](uv_connect_t* req, int status)
 			{
 				std::unique_ptr<uv_connect_t> reqHolder(req);
@@ -61,9 +61,9 @@ namespace uv {
 
 		bool connect6(const std::string& ip, const int port, CallbackWithResult callback)
 		{
-			callbacks::store(getHandle(), internal::eUVCallbackIdConnect6, callback);
+			callbacks::store(get(), internal::eUVCallbackIdConnect6, callback);
 			ip6_addr ip6 = to_ip6_addr(ip, port);
-			return uv_tcp_connect(new uv_connect_t(), getHandle(), reinterpret_cast<sockaddr*>(&ip6),
+			return uv_tcp_connect(new uv_connect_t(), get(), reinterpret_cast<sockaddr*>(&ip6),
 				[](uv_connect_t* req, int status)
 			{
 				std::unique_ptr<uv_connect_t> reqHolder(req);
@@ -75,7 +75,7 @@ namespace uv {
 		{
 			struct sockaddr_storage addr;
 			int len = sizeof(addr);
-			if (uv_tcp_getsockname(getHandle(), reinterpret_cast<struct sockaddr*>(&addr), &len) == 0)
+			if (uv_tcp_getsockname(get(), reinterpret_cast<struct sockaddr*>(&addr), &len) == 0)
 			{
 				isIp4 = (addr.ss_family == AF_INET);
 				if (isIp4)
@@ -94,7 +94,7 @@ namespace uv {
 		{
 			struct sockaddr_storage addr;
 			int len = sizeof(addr);
-			if (uv_tcp_getpeername(getHandle(), reinterpret_cast<struct sockaddr*>(&addr), &len) == 0)
+			if (uv_tcp_getpeername(get(), reinterpret_cast<struct sockaddr*>(&addr), &len) == 0)
 			{
 				ip4 = (addr.ss_family == AF_INET);
 				if (ip4)
