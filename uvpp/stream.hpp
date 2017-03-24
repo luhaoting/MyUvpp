@@ -1,11 +1,11 @@
 #pragma once
 
 #include "error.hpp"
+#include "handle.hpp"
 #include <algorithm>
 #include <memory>
 
 namespace uv {
-
 	template<typename handle_T>
 	class Stream : public Handle<handle_T>
 	{
@@ -26,20 +26,20 @@ namespace uv {
 				[](uv_stream_t* s, int status)
 			{
 				callbacks::invoke<decltype(callback)>(s->data, uv::internal::eUVCallbackIdListen, Error(status));
-			})
+			} == 0);
 		}
 
 		bool accept(Stream& client)
 		{
-			return uv_accept(Handle<T>::template get<uv_stream_t>(), client.Handle<T>::template get<uv_stream_t>()) == 0;
+			return uv_accept(Handle<handle_T>::template get<uv_stream_t>(), client.Handle<handle_T>::template get<uv_stream_t>()) == 0;
 		}
 
 		template <int max_alloc_size>
 		bool read_start(std::function<void(const char* buff, ssize_t len)> callback)
 		{
 			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdReadStart, callback);
-			
-			return uv_read_start(Handle<handle_T>::template get<uv_stream_t>(), 
+
+			return uv_read_start(Handle<handle_T>::template get<uv_stream_t>(),
 				[](uv_handle_t*, size_t suggested_size, uv_buf_t* buf)/*uv_readstart_cb*/
 			{
 				assert(buf);
@@ -81,8 +81,8 @@ namespace uv {
 				else if (nread >= 0)
 				{
 					callbacks::invoke<decltype(callback)>(s->data, uv::internal::eUVCallbackIdReadStart, buf->base, nread);
-				}) == 0;
-			}
+				}
+			}) == 0;
 		}
 
 		bool read_start(std::function<void(const char* buff, ssize_t len)> callback)
@@ -102,8 +102,8 @@ namespace uv {
 			uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf), buf.length() } };
 
 			callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
-			
-			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1, 
+
+			return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1,
 				[](uv_write_t* req, int status)
 			{
 				std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
@@ -131,7 +131,7 @@ namespace uv {
 
 			callbacks::store(handle<HANDLE_T>::get()->data, uvpp::internal::uv_cid_write, callback);
 
-			return uv_write(new uv_write_t, handle<HANDLE_T>::template get<uv_stream_t>(), bufs, 1, 
+			return uv_write(new uv_write_t, handle<HANDLE_T>::template get<uv_stream_t>(), bufs, 1,
 				[](uv_write_t* req, int status)
 			{
 				std::unique_ptr<uv_write_t> reqHolder(req);
@@ -142,7 +142,7 @@ namespace uv {
 		bool shutdown(CallbackWithResult callback)
 		{
 			callbacks::store(Handle<handle_T>::get()->data, uv::internal.eUVCallbackIdShutdown, callback);
-			return uv_shutdown(new uv_shutdown_t, Handle<handle_T>::template get<uv_stream_t>(), 
+			return uv_shutdown(new uv_shutdown_t, Handle<handle_T>::template get<uv_stream_t>(),
 				[](uv_shutdown_t* req, int status)
 			{
 				std::unique_ptr<uv_write_t> reqHolder(req);

@@ -22,7 +22,7 @@ namespace uv {
 
 		bool nodelay(bool enable)
 		{
-			uv_tcp_nodelay(get(), enable ? 1 : 0) == 0;
+			return uv_tcp_nodelay(get(), enable ? 1 : 0) == 0;
 		}
 
 		bool keep_alive(bool enable, unsigned int delay)
