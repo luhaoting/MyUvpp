@@ -32,6 +32,10 @@
     <ClInclude Include="..\uvpp\stream.hpp" />
     <ClInclude Include="..\uvpp\tcp.hpp" />
     <ClInclude Include="..\uvpp\timer.hpp" />
+    <ClInclude Include="Svr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="hpp.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F6BD6D5-C25A-40B1-B958-64EF60D97113}</ProjectGuid>

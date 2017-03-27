@@ -85,8 +85,9 @@ int main()
 	timer.start([]() {std::cout << " ." << std::endl; }, time);
 	loop.run();
 
-
 	timer.close();
 	tcp.close();
+
+
 	return 0;
 }

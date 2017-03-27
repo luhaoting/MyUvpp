@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Doc">
+      <UniqueIdentifier>{9e186790-5d28-427c-bd85-e4afe3ee62c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\uvpp">
+      <UniqueIdentifier>{14e31fcf-7945-46d6-befc-11d3b71e2693}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -19,32 +25,40 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\uvpp\callback.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uvpp\error.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uvpp\free_handle.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uvpp\handle.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uvpp\loop.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uvpp\stream.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\uvpp\tcp.hpp">
+      <Filter>头文件\uvpp</Filter>
     </ClInclude>
     <ClInclude Include="..\uvpp\timer.hpp">
-      <Filter>头文件</Filter>
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\callback.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\error.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\free_handle.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\handle.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\loop.hpp">
+      <Filter>头文件\uvpp</Filter>
     </ClInclude>
     <ClInclude Include="..\uvpp\net.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\stream.hpp">
+      <Filter>头文件\uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="Svr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\uvpp\tcp.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="hpp.txt">
+      <Filter>Doc</Filter>
+    </Text>
   </ItemGroup>
 </Project>
