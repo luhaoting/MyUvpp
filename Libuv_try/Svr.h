@@ -21,6 +21,7 @@ public:
 
 	bool listen(const int nPort);
 
+	
 private:
 	unique_ptr<Loop> m_base;
 	unique_ptr<Tcp> m_listener;
