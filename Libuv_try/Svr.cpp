@@ -12,5 +12,6 @@ Gate::~Gate()
 
 bool Gate::listen(const int nPort)
 {
-	m_listener->listen()
+	//m_listener->listen();
+	return true;
 }
