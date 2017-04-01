@@ -21,12 +21,14 @@ public:
 
 	bool listen(const int nPort);
 
+private:
+	void on_new_connection(uv::Error error);
 	
 private:
 	unique_ptr<Loop> m_base;
 	unique_ptr<Tcp> m_listener;
 
-	list<Tcp> m_active_client;
+	list<unique_ptr<Tcp> > m_active_client;
 
 	
 };

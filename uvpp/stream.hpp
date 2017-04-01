@@ -26,7 +26,7 @@ namespace uv {
 				[](uv_stream_t* s, int status)
 			{
 				callbacks::invoke<decltype(callback)>(s->data, uv::internal::eUVCallbackIdListen, Error(status));
-			} == 0);
+			}) == 0;
 		}
 
 		bool accept(Stream& client)
@@ -43,7 +43,7 @@ namespace uv {
 				[](uv_handle_t*, size_t suggested_size, uv_buf_t* buf)/*uv_readstart_cb*/
 			{
 				assert(buf);
-				auto size = std::max(suggested_size, max_alloc_size);
+				auto size = max(suggested_size, max_alloc_size);
 				buf->base = new char[size];
 				buf->len = size;
 			},
@@ -74,9 +74,8 @@ namespace uv {
 
 					//这是libuv cpp11 推荐Demo uvpp的代码
 					//assert(nread == UV_EOF);
-					//callbacks::invoke<decltype(callback)>(s->data, uvpp::internal::uv_cid_read_start, nullptr, nread);
 
-					close();
+					callbacks::invoke<decltype(callback)>(s->data, uv::internal::eUVCallbackIdReadStart, nullptr, nread);
 				}
 				else if (nread >= 0)
 				{
