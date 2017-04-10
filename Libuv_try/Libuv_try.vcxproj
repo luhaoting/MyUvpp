@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Svr.cpp" />
   </ItemGroup>
@@ -32,6 +33,7 @@
     <ClInclude Include="..\uvpp\stream.hpp" />
     <ClInclude Include="..\uvpp\tcp.hpp" />
     <ClInclude Include="..\uvpp\timer.hpp" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Svr.h" />
   </ItemGroup>
   <ItemGroup>
