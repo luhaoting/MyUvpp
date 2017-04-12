@@ -15,6 +15,12 @@
     <Filter Include="头文件\uvpp">
       <UniqueIdentifier>{14e31fcf-7945-46d6-befc-11d3b71e2693}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\reference">
+      <UniqueIdentifier>{1691b174-9f2f-4163-bedf-ebfe5fe19128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\reference">
+      <UniqueIdentifier>{42f2e152-27c9-4eac-a27d-c37540c4de28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -25,6 +31,18 @@
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_tcpclient_reconnect.cpp">
+      <Filter>源文件\reference</Filter>
+    </ClCompile>
+    <ClCompile Include="tcpclient.cpp">
+      <Filter>源文件\reference</Filter>
+    </ClCompile>
+    <ClCompile Include="tcpserver.cpp">
+      <Filter>源文件\reference</Filter>
+    </ClCompile>
+    <ClCompile Include="test_tcpclient.cpp">
+      <Filter>源文件\reference</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +77,33 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Client.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Connection.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_uv.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="tcpserverprotocolprocess.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="tcpserver.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="tcpclient.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="pod_circularbuffer.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="packet_sync.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="net_base.h">
+      <Filter>头文件\reference</Filter>
+    </ClInclude>
+    <ClInclude Include="ring_buffer.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

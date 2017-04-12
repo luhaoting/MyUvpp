@@ -50,6 +50,7 @@ void Gate::on_new_connection(uv::Error error)
 	client->read_start([&](const char *buff, size_t len)
 	{
 		//接受数据
+		
 	}
 	);
 }

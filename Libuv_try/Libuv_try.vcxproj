@@ -22,6 +22,10 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Svr.cpp" />
+    <ClCompile Include="tcpclient.cpp" />
+    <ClCompile Include="tcpserver.cpp" />
+    <ClCompile Include="test_tcpclient.cpp" />
+    <ClCompile Include="test_tcpclient_reconnect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\uvpp\callback.hpp" />
@@ -34,7 +38,16 @@
     <ClInclude Include="..\uvpp\tcp.hpp" />
     <ClInclude Include="..\uvpp\timer.hpp" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Connection.hpp" />
+    <ClInclude Include="net_base.h" />
+    <ClInclude Include="packet_sync.h" />
+    <ClInclude Include="pod_circularbuffer.h" />
+    <ClInclude Include="ring_buffer.hpp" />
     <ClInclude Include="Svr.h" />
+    <ClInclude Include="tcpclient.h" />
+    <ClInclude Include="tcpserver.h" />
+    <ClInclude Include="tcpserverprotocolprocess.h" />
+    <ClInclude Include="thread_uv.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="hpp.txt" />
