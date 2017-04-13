@@ -2,9 +2,9 @@
 * @file     packet_sync.h
 * @brief    TCP 数据包封装.依赖libuv,openssl.功能：接收数据，解析得到一帧后回调给用户。同步处理，接收到马上解析
 * @details  根据net_base.h中NetPacket的定义，对数据包进行封装。
-			md5校验码使用openssl函数
-			同一线程中实时解码
-			长度为0的md5为：d41d8cd98f00b204e9800998ecf8427e，改为全0. 编解码时修改。
+            md5校验码使用openssl函数
+            同一线程中实时解码
+            长度为0的md5为：d41d8cd98f00b204e9800998ecf8427e，改为全0. 编解码时修改。
 //调用方法
 Packet packet;
 packet.SetPacketCB(GetPacket,&serpac);
@@ -64,16 +64,16 @@ public:
         TAIL = packtail;
         return true;
     }
-	
+    
 public:
     void recvdata(const unsigned char* data, int len) { //接收到数据，把数据保存在circulebuffer_
         int iret = 0;
         while (iret < len || truepacketlen >= NET_PACKAGE_HEADLEN + 2) 
-		{
+        {
             if (PARSE_NOTHING == parsetype)
-			{//未解析出head
+            {//未解析出head
                 if (thread_readdata.len - truepacketlen >= len - iret) 
-				{
+                {
                     memcpy(thread_readdata.base + truepacketlen, data + iret, len - iret);
                     truepacketlen += len - iret;
                     iret  = len;
@@ -90,7 +90,7 @@ public:
                 }
                 headpos = headpt - thread_readdata.base;
                 if (truepacketlen - headpos - 1 < NET_PACKAGE_HEADLEN) 
-				{ //2.2
+                { //2.2
                     if (headpos != 0) {
                         fprintf(stdout, "读取%d数据，找到包头,位于%d,数据不够解析帧头，先缓存\n", truepacketlen, headpos);
                         memmove(thread_readdata.base, thread_readdata.base + headpos, truepacketlen - headpos);
@@ -168,7 +168,7 @@ public:
 //                 MD5_Final(md5str, &md5);
             }
    //         if (memcmp(theNexPacket.check, md5str, MD5_DIGEST_LENGTH) != 0) 
-			//{
+            //{
    //             fprintf(stdout, "读取%d数据, 校验码不合法\n", NET_PACKAGE_HEADLEN + theNexPacket.datalen + 2);
    //             if (truepacketlen - headpos - 1 - NET_PACKAGE_HEADLEN >= theNexPacket.datalen + 1) {//thread_readdata数据足够
    //                 memmove(thread_readdata.base, thread_readdata.base + headpos + 1, truepacketlen - headpos - 1); //2.4
@@ -233,7 +233,7 @@ private:// no copy
 /*****************************
 * @brief   把数据组合成NetPacket格式的二进制流，可直接发送。
 * @param   packet --NetPacket包，里面的version,header,tail,type,datalen,reserve必须提前赋值，该函数会计算check的值。然后组合成二进制流返回
-	       data   --要发送的实际数据
+           data   --要发送的实际数据
 * @return  std::string --返回的二进制流。地址：&string[0],长度：string.length()
 ******************************/
 inline std::string PacketData(NetPacket& packet, const unsigned char* data)

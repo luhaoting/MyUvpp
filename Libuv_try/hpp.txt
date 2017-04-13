@@ -1,49 +1,49 @@
 *.hpp要注意的问题有：
-		a)不可包含全局对象和全局函数。
-			由于hpp本质上是作为.h被调用者include，所以当hpp文件中存在全局对象或者全局函数，而该hpp被多个
-			调用者include时，将在链接时导致符号重定义错误。要避免这种情况，需要去除全局对象，将全局函数封
-			装为类的静态方法。
+        a)不可包含全局对象和全局函数。
+            由于hpp本质上是作为.h被调用者include，所以当hpp文件中存在全局对象或者全局函数，而该hpp被多个
+            调用者include时，将在链接时导致符号重定义错误。要避免这种情况，需要去除全局对象，将全局函数封
+            装为类的静态方法。
 
-		b)类之间不可循环调用
-			在.h和.cpp的场景中，当两个类或者多个类之间有循环调用关系时，只要预先在头文件做被调用类的声明
-			即可，如下：
-				class B;
-				class A
-				{
-					public:
-					void someMethod(B b);
-				};
+        b)类之间不可循环调用
+            在.h和.cpp的场景中，当两个类或者多个类之间有循环调用关系时，只要预先在头文件做被调用类的声明
+            即可，如下：
+                class B;
+                class A
+                {
+                    public:
+                    void someMethod(B b);
+                };
 
-				class B{
-				public:
-				void someMethod(A a);
-				};
+                class B{
+                public:
+                void someMethod(A a);
+                };
 
-			在hpp场景中，由于定义与实现都已经存在于一个文件，调用者必需明确知道被调用者的所有定义，而不能等到cpp
-			中去编译。因此hpp中必须整理类之间调用关系，不可产生循环调用。同理，对于当两个类A和B分别定义在各自的
-			hpp文件中，形如以下的循环调用也将导致编译错误：
-				//a.hpp
-				#include "b.hpp"
-				class A
-				{
-					public:
-					void someMethod(B b);
-				};
-			
-				//b.hpp
-				#include "a.hpp"
-				class B
-				{
-					public:
-					void someMethod(A a);
-				}
+            在hpp场景中，由于定义与实现都已经存在于一个文件，调用者必需明确知道被调用者的所有定义，而不能等到cpp
+            中去编译。因此hpp中必须整理类之间调用关系，不可产生循环调用。同理，对于当两个类A和B分别定义在各自的
+            hpp文件中，形如以下的循环调用也将导致编译错误：
+                //a.hpp
+                #include "b.hpp"
+                class A
+                {
+                    public:
+                    void someMethod(B b);
+                };
+            
+                //b.hpp
+                #include "a.hpp"
+                class B
+                {
+                    public:
+                    void someMethod(A a);
+                }
 
-		c)不可使用静态成员
-			静态成员的使用限制在于如果类含有静态成员，则在hpp中必需加入静态成员初始化代码，当该hpp被多个文档include时，
-			将产生符号重定义错误。唯 一的例外是const static整型成员，因为在vs2003中，该类型允许在定义时初始化，
-			如：
-			class A
-			{
-				public:
-				const static int intValue = 123;
-			};
+        c)不可使用静态成员
+            静态成员的使用限制在于如果类含有静态成员，则在hpp中必需加入静态成员初始化代码，当该hpp被多个文档include时，
+            将产生符号重定义错误。唯 一的例外是const static整型成员，因为在vs2003中，该类型允许在定义时初始化，
+            如：
+            class A
+            {
+                public:
+                const static int intValue = 123;
+            };

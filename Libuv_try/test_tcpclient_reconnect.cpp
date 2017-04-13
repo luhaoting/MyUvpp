@@ -38,7 +38,7 @@
 //     TCPClient* client = (TCPClient*)userdata;
 //     if (NET_EVENT_TYPE_RECONNECT == eventtype) {
 //         fprintf(stdout, "succeed reconnect.\n");
-// 		char senddata[256];
+//         char senddata[256];
 //         memset(senddata, 0, sizeof(senddata));
 //         sprintf(senddata, "client(%p) call %d", client, ++call_time);
 //         NetPacket packet;

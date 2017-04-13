@@ -16,9 +16,9 @@ public:
     virtual ~TCPServerProtocolProcess(){}
 
     //parse the recv packet, and make the response packet return. see test_tcpserver.cpp for example
-	//packet     : the recv packet
-	//buf        : the packet data
-	//std::string: the response packet. no response can't return empty string.
+    //packet     : the recv packet
+    //buf        : the packet data
+    //std::string: the response packet. no response can't return empty string.
     virtual const std::string& ParsePacket(const NetPacket& packet, const unsigned char* buf) = 0;
 };
 

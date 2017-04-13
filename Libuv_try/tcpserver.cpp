@@ -264,6 +264,7 @@ void TCPServer::AcceptConnection(uv_stream_t* server, int status)
     }
     TcpClientCtx* tmptcp = NULL;
     if (tcpsock->avai_tcphandle_.empty()) {
+        //创建clientCtx
         tmptcp = AllocTcpClientCtx(tcpsock);
     } else {
         tmptcp = tcpsock->avai_tcphandle_.front();
@@ -335,10 +336,10 @@ void TCPServer::SetClosedCB(TcpCloseCB pfun, void* userdata)
 /* Fully close a loop */
 void TCPServer::CloseWalkCB(uv_handle_t* handle, void* arg)
 {
-	TCPServer* theclass = (TCPServer*)arg;
-	if (!uv_is_closing(handle)) {
-		uv_close(handle, AfterServerClose);
-	}
+    TCPServer* theclass = (TCPServer*)arg;
+    if (!uv_is_closing(handle)) {
+        uv_close(handle, AfterServerClose);
+    }
 }
 
 void TCPServer::AfterServerClose(uv_handle_t* handle)
@@ -386,7 +387,7 @@ void TCPServer::StartLog(const char* logpath /*= nullptr*/)
 
 void TCPServer::StopLog()
 {
-	//zsummer::log4z::ILog4zManager::GetInstance()->Stop();
+    //zsummer::log4z::ILog4zManager::GetInstance()->Stop();
 }
 
 void TCPServer::SubClientClosed(int clientid, void* userdata)
@@ -508,7 +509,7 @@ AcceptClient::~AcceptClient()
 {
     Close();
     //while will block loop.
-	//the right way is new AcceptClient and delete it on SetClosedCB'cb
+    //the right way is new AcceptClient and delete it on SetClosedCB'cb
     while (!isclosed_) {
         ThreadSleep(10);
     }
@@ -632,7 +633,7 @@ TcpClientCtx* AllocTcpClientCtx(void* parentserver)
     ctx->packet_ = new PacketSync;
     ctx->read_buf_.base = (char*)malloc(BUFFER_SIZE);
     ctx->read_buf_.len = BUFFER_SIZE;
-	ctx->write_req.data = ctx;//store self
+    ctx->write_req.data = ctx;//store self
     ctx->parent_server = parentserver;
     ctx->parent_acceptclient = NULL;
     return ctx;

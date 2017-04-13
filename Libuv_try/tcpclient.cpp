@@ -462,13 +462,13 @@ void TCPClient::send_inl(uv_write_t* req /*= NULL*/)
 {
     write_param* writep = (write_param*)req;
     if (writep) 
-	{
+    {
         if (writeparam_list_.size() > MAXLISTSIZE) 
-		{
+        {
             FreeWriteParam(writep);
         }
-		else 
-		{
+        else 
+        {
             writeparam_list_.push_back(writep);
         }
     }

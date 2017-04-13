@@ -4,9 +4,9 @@
 * @details  大小端判断
             32&64位系统判断
             ntohll与htonl的实现
-			int32与int64序列/反序列化为char[4],char[8]
-			数据包头结构定义
-			在win平台测试过，linux平台未测试
+            int32与int64序列/反序列化为char[4],char[8]
+            数据包头结构定义
+            在win平台测试过，linux平台未测试
 * @author   phata, wqvbjhc@gmail.com
 * @date     2014-5-16
 * @mod      2014-5-21 phata 包定义添加了包头包尾版本和校验位信息
@@ -136,13 +136,13 @@ inline bool CharToInt64(const unsigned char* charnum, uint64_t& intnum)
 
 #define NET_PACKAGE_VERSION 0x01
 typedef struct _NetPacket{//传输自定义数据包头结构
-	int32_t version;        //封包的版本号，不同版本包的定义可能不同  :0-3
-	unsigned char header;   //包头-可自定义，例如0x02                 :4
-	unsigned char tail;     //包尾-可自定义，例如0x03                 :5
-	unsigned char check[16];//pack data校验值-16字节的md5二进制数据   :6-21
-	int32_t type;           //包数据的类型                            :22-25
-	int32_t datalen;        //包数据的内容长度-不包括此包结构和包头尾 :26-29
-	int32_t reserve;        //包数据保留字段-暂时不使用               :30-33
+    int32_t version;        //封包的版本号，不同版本包的定义可能不同  :0-3
+    unsigned char header;   //包头-可自定义，例如0x02                 :4
+    unsigned char tail;     //包尾-可自定义，例如0x03                 :5
+    unsigned char check[16];//pack data校验值-16字节的md5二进制数据   :6-21
+    int32_t type;           //包数据的类型                            :22-25
+    int32_t datalen;        //包数据的内容长度-不包括此包结构和包头尾 :26-29
+    int32_t reserve;        //包数据保留字段-暂时不使用               :30-33
 }NetPacket;
 #define NET_PACKAGE_HEADLEN sizeof(NetPacket)//包头长度，为固定大小34字节
 
@@ -150,48 +150,48 @@ typedef struct _NetPacket{//传输自定义数据包头结构
 
 //NetPackage转为char*数据，chardata必须有38字节的空间
 inline bool NetPacketToChar(const NetPacket& package, unsigned char* chardata){
-	if(!Int32ToChar((uint32_t)package.version,chardata)){
-		return false;
-	}
-	chardata[4]=package.header;
-	chardata[5]=package.tail;
-	memcpy(chardata+6,package.check,sizeof(package.check));
+    if(!Int32ToChar((uint32_t)package.version,chardata)){
+        return false;
+    }
+    chardata[4]=package.header;
+    chardata[5]=package.tail;
+    memcpy(chardata+6,package.check,sizeof(package.check));
 
-	if(!Int32ToChar((uint32_t)package.type,chardata+22)){
-		return false;
-	}
-	if(!Int32ToChar((uint32_t)package.datalen,chardata+26)){
-		return false;
-	}
-	if(!Int32ToChar((uint32_t)package.reserve,chardata+30)){
-		return false;
-	}
-	return true;
+    if(!Int32ToChar((uint32_t)package.type,chardata+22)){
+        return false;
+    }
+    if(!Int32ToChar((uint32_t)package.datalen,chardata+26)){
+        return false;
+    }
+    if(!Int32ToChar((uint32_t)package.reserve,chardata+30)){
+        return false;
+    }
+    return true;
 }
 
 //char*转为NetPackage数据，chardata必须有38字节的空间
 inline bool CharToNetPacket(const unsigned char* chardata, NetPacket& package){
-	uint32_t tmp32;
-	if(!CharToInt32(chardata,tmp32)){
-		return false;
-	}
-	package.version = tmp32;
-	package.header = chardata[4];
-	package.tail = chardata[5];
-	memcpy(package.check,chardata+6,sizeof(package.check));
-	if(!CharToInt32(chardata+22,tmp32)){
-		return false;
-	}
-	package.type = tmp32;
-	if(!CharToInt32(chardata+26,tmp32)){
-		return false;
-	}
-	package.datalen = tmp32;
-	if(!CharToInt32(chardata+30,tmp32)){
-		return false;
-	}
-	package.reserve = tmp32;
-	return true;
+    uint32_t tmp32;
+    if(!CharToInt32(chardata,tmp32)){
+        return false;
+    }
+    package.version = tmp32;
+    package.header = chardata[4];
+    package.tail = chardata[5];
+    memcpy(package.check,chardata+6,sizeof(package.check));
+    if(!CharToInt32(chardata+22,tmp32)){
+        return false;
+    }
+    package.type = tmp32;
+    if(!CharToInt32(chardata+26,tmp32)){
+        return false;
+    }
+    package.datalen = tmp32;
+    if(!CharToInt32(chardata+30,tmp32)){
+        return false;
+    }
+    package.reserve = tmp32;
+    return true;
 }
 #endif//NET_BASE_H
 
@@ -200,50 +200,50 @@ inline bool CharToNetPacket(const unsigned char* chardata, NetPacket& package){
 //#include "common/net/net_base.h"
 //int main(int argc, char **argv)
 //{
-//	printf("islittleendian %d\n",IsLittleendian());
-//	printf("IsSystem32 %d\n",IsSystem32());
-//	uint32_t intnum = 0x1234567A;
-//	unsigned char charnum[4];
-//	Int32ToChar(intnum,&charnum[0]);
-//	printf("Int32ToChar-int=0x%x, %d, char=%x,%x,%x,%x\n",intnum,intnum,charnum[0],charnum[1],charnum[2],charnum[3]);
-//	CharToInt32(&charnum[0],intnum);
-//	printf("CharToInt32-int=0x%x, %d, char=%x,%x,%x,%x\n",intnum,intnum,charnum[0],charnum[1],charnum[2],charnum[3]);
+//    printf("islittleendian %d\n",IsLittleendian());
+//    printf("IsSystem32 %d\n",IsSystem32());
+//    uint32_t intnum = 0x1234567A;
+//    unsigned char charnum[4];
+//    Int32ToChar(intnum,&charnum[0]);
+//    printf("Int32ToChar-int=0x%x, %d, char=%x,%x,%x,%x\n",intnum,intnum,charnum[0],charnum[1],charnum[2],charnum[3]);
+//    CharToInt32(&charnum[0],intnum);
+//    printf("CharToInt32-int=0x%x, %d, char=%x,%x,%x,%x\n",intnum,intnum,charnum[0],charnum[1],charnum[2],charnum[3]);
 //
-//	uint64_t int64num = 0x123456789ABCDEF0;
-//	unsigned char char8num[8];
-//	Int64ToChar(int64num,char8num);
-//	printf("Int64ToChar-int=0x%I64x, %I64d, char=%x,%x,%x,%x,%x,%x,%x,%x\n",int64num,int64num,char8num[0],char8num[1],char8num[2],
-//		char8num[3],char8num[4],char8num[5],char8num[6],char8num[7]);
-//	CharToInt64(char8num,int64num);
-//	printf("CharToInt64-int=0x%I64x, %I64d, char=%x,%x,%x,%x,%x,%x,%x,%x\n",int64num,int64num,char8num[0],char8num[1],char8num[2],
-//		char8num[3],char8num[4],char8num[5],char8num[6],char8num[7]);
+//    uint64_t int64num = 0x123456789ABCDEF0;
+//    unsigned char char8num[8];
+//    Int64ToChar(int64num,char8num);
+//    printf("Int64ToChar-int=0x%I64x, %I64d, char=%x,%x,%x,%x,%x,%x,%x,%x\n",int64num,int64num,char8num[0],char8num[1],char8num[2],
+//        char8num[3],char8num[4],char8num[5],char8num[6],char8num[7]);
+//    CharToInt64(char8num,int64num);
+//    printf("CharToInt64-int=0x%I64x, %I64d, char=%x,%x,%x,%x,%x,%x,%x,%x\n",int64num,int64num,char8num[0],char8num[1],char8num[2],
+//        char8num[3],char8num[4],char8num[5],char8num[6],char8num[7]);
 //
-//	printf("sizeof NetPackage=%d\n",sizeof(NetPacket));
-//	unsigned char packagechar[NET_PACKAGE_HEADLEN];
-//	NetPacket package;
-//	package.type = intnum;
-//	package.reserve = intnum + 1;
-//	package.datalen = int64num;
-//	memset(packagechar,0,NET_PACKAGE_HEADLEN);
-//	NetPacketToChar(package,packagechar);
-//	printf("NetPackageToChar -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
-//	for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
-//		printf("%x,",packagechar[i]);
-//	}
-//	printf("\n");
-//	memset(&package,0,NET_PACKAGE_HEADLEN);
-//	CharToNetPacket(packagechar,package);
-//	printf("CharToNetPackage -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
-//	for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
-//		printf("%x,",packagechar[i]);
-//	}
-//	printf("\n");
-//	memset(packagechar,0,NET_PACKAGE_HEADLEN);
-//	NetPacketToChar(package,packagechar);
-//	printf("NetPackageToChar -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
-//	for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
-//		printf("%x,",packagechar[i]);
-//	}
-//	printf("\n");
-//	return 0;
+//    printf("sizeof NetPackage=%d\n",sizeof(NetPacket));
+//    unsigned char packagechar[NET_PACKAGE_HEADLEN];
+//    NetPacket package;
+//    package.type = intnum;
+//    package.reserve = intnum + 1;
+//    package.datalen = int64num;
+//    memset(packagechar,0,NET_PACKAGE_HEADLEN);
+//    NetPacketToChar(package,packagechar);
+//    printf("NetPackageToChar -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
+//    for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
+//        printf("%x,",packagechar[i]);
+//    }
+//    printf("\n");
+//    memset(&package,0,NET_PACKAGE_HEADLEN);
+//    CharToNetPacket(packagechar,package);
+//    printf("CharToNetPackage -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
+//    for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
+//        printf("%x,",packagechar[i]);
+//    }
+//    printf("\n");
+//    memset(packagechar,0,NET_PACKAGE_HEADLEN);
+//    NetPacketToChar(package,packagechar);
+//    printf("NetPackageToChar -- package data (type=%d,reserve=%d,datalen=%d), char=",package.type,package.reserve,package.datalen);
+//    for (int i=0; i<NET_PACKAGE_HEADLEN; ++i) {
+//        printf("%x,",packagechar[i]);
+//    }
+//    printf("\n");
+//    return 0;
 //}
