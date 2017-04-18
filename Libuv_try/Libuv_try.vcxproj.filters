@@ -73,9 +73,6 @@
     <ClInclude Include="..\uvpp\stream.hpp">
       <Filter>头文件\uvpp</Filter>
     </ClInclude>
-    <ClInclude Include="Svr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -104,6 +101,9 @@
       <Filter>头文件\reference</Filter>
     </ClInclude>
     <ClInclude Include="ring_buffer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Svr.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

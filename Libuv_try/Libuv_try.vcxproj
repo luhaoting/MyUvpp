@@ -43,7 +43,7 @@
     <ClInclude Include="packet_sync.h" />
     <ClInclude Include="pod_circularbuffer.h" />
     <ClInclude Include="ring_buffer.hpp" />
-    <ClInclude Include="Svr.h" />
+    <ClInclude Include="Svr.hpp" />
     <ClInclude Include="tcpclient.h" />
     <ClInclude Include="tcpserver.h" />
     <ClInclude Include="tcpserverprotocolprocess.h" />

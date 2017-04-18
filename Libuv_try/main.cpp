@@ -2,7 +2,9 @@
 #include <uv.h>
 #include <malloc.h>
 #include <iostream>
+#include <sstream>
 #include <thread>
+#include <map>
 
 /*
 #pragma comment(lib,"Ws2_32.lib") 
@@ -18,7 +20,8 @@
 #include "loop.hpp"
 #include "timer.hpp"
 #include "tcp.hpp"
-#define server_work 1
+
+#define uv_work 1
 
 #if uv_work
 static void PrintPoint(uv_timer_t* t)
@@ -78,6 +81,7 @@ int main()
 
 
     uv::Loop loop;
+
     uv::Timer timer(loop);
     uv::Tcp tcp(loop);
 

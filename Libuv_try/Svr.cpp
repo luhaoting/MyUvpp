@@ -1,4 +1,4 @@
-#include "Svr.h"
+#include "Svr.hpp"
 
 Gate::Gate() :
     m_base(new Loop()),
@@ -53,4 +53,71 @@ void Gate::on_new_connection(uv::Error error)
         
     }
     );
+}
+
+
+
+
+
+
+void CSimpleSvr::start(std::string& strIp, int nPort)
+{
+    m_SvrHandle.bind(strIp, nPort);
+    m_SvrHandle.listen(std::bind(&CSimpleSvr::on_new_connected, this, placeholders::_1), 128);
+}
+
+void CSimpleSvr::on_new_connected(uv::Error state)
+{
+    if (state)
+    {
+        G_LOG() << "Client Connected Error UvError:" << state.str() << std::endl;
+    }
+
+    //alloc client
+    auto client_conn = std::make_unique<ClientCtx>(m_rLoop);
+
+    if (m_SvrHandle.accept(client_conn->m_tcphandel))
+    {
+        //init client from accept
+        client_conn->m_id = AllocID();
+        m_all_Client.insert(std::pair<ID, std::unique_ptr<ClientCtx>>(client_conn->m_id, move(client_conn)));
+    }
+    else
+    {
+        G_LOG() << "Client Accept Error" << std::endl;
+        return;
+    }
+    /*
+    [var]表示值传递捕捉var
+    [=]值传递捕获父作用域中所有的变量。
+    [&var]引用方式捕获var
+    [&]引用方式捕获父作用域中所有的变量。
+    [this]值传递捕获当前的this指针。
+    */
+    ID clientid = client_conn->m_id;
+    auto close_cb = [this, clientid]()
+    {
+        m_all_Client.erase(clientid);
+    };//这个写法是会产生clientid个临时变量
+
+    client_conn->m_tcphandel.close(close_cb);//client 关闭的时候 去除自己在服务器的句柄
+
+    auto write_cb = [&](uv::Error error)
+    {
+        if (!error)
+        {
+            //TODO
+        }
+        else
+        {
+            G_LOG() << "TCP client write error: ID = " << client_conn->m_id << std::endl;
+            client_conn->m_tcphandel.close(close_cb);
+        }
+    };
+}
+
+int CSimpleSvr::AllocID()
+{
+    static int i = 0;
+    return i++;
 }
