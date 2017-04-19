@@ -98,25 +98,37 @@ namespace uv {
         bool write(const char* buf, ssize_t len, CallbackWithResult callback)
         {
             //用 buf 初始化 uv_buf_t
-            uv_buf_t bufs[] = { uv_buf_t { const_cast<char*>(buf), buf.length() } };
+#ifdef UV_UNIX_H
+            uv_buf_t bufs = { uv_buf_t{ const_cast<char*>(buf), static_cast<size_t>(len) } };
+#endif // UV_UNIX_H
+#ifdef _WIN32_WINNT
+            uv_buf_t bufs = { uv_buf_t{ static_cast<ULONG>(len), const_cast<char*>(buf) } };
+#endif // _WIN32_WINNT
 
             callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
 
-            return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1,
+            return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), &bufs, 1,
                 [](uv_write_t* req, int status)
             {
                 std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
-                callbacks::invoke<decltype(callback)>(req->handle->data, uv::internal::eUVCallbackIdWrite, error(status));
+                callbacks::invoke<decltype(callback)>(req->handle->data, uv::internal::eUVCallbackIdWrite, Error(status));
             }) == 0;
         }
 
         bool write(const std::vector<char> buf, CallbackWithResult callback)
         {
-            uv_buf_t bufs[] = { uv_buf_t {const_cast<char*>(&buf[0], buf.size()), } }    //vector 可以这样强转 char* 啊!!
+            //uv_buf_t bufs[] = { uv_buf_t {const_cast<char*>(&buf[0], buf.size()), } }    //vector 可以这样强转 char* 啊!!
+
+#ifdef UV_UNIX_H
+            uv_buf_t bufs = { uv_buf_t{ const_cast<char*>(&buf[0]), buf.size() } };
+#endif // UV_UNIX_H
+#ifdef _WIN32_WINNT
+            uv_buf_t bufs = { uv_buf_t{ buf.size(), const_cast<char*>(&buf[0]) } };
+#endif // _WIN32_WINNT
 
             callbacks::store(Handle<handle_T>::get()->data, uv::internal::eUVCallbackIdWrite, callback);
 
-            return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), bufs, 1,
+            return uv_write(new uv_write_t, Handle<handle_T>::template get<uv_stream_t>(), &bufs, 1,
                 [](uv_write_t* req, int status)
             {
                 std::unique_ptr<uv_write_t> reqHolder(req);//这里用unique_ptr 释放了req
@@ -126,11 +138,18 @@ namespace uv {
 
         bool write(const std::string& buf, CallbackWithResult callback)
         {
-            uv_buf_t bufs[] = { uv_buf_t{ const_cast<char*>(buf.c_str(), buf.size()), } }
+            //uv_buf_t bufs[] = { uv_buf_t{ const_cast<char*>(buf.c_str(), buf.size()), } }
+
+#ifdef UV_UNIX_H
+            uv_buf_t bufs = { uv_buf_t{ const_cast<char*>(buf.c_str()), buf.size() } };
+#endif // UV_UNIX_H
+#ifdef _WIN32_WINNT
+            uv_buf_t bufs = { uv_buf_t{ buf.size(), const_cast<char*>(buf.c_str()) } };
+#endif // _WIN32_WINNT
 
             callbacks::store(handle<HANDLE_T>::get()->data, uvpp::internal::uv_cid_write, callback);
 
-            return uv_write(new uv_write_t, handle<HANDLE_T>::template get<uv_stream_t>(), bufs, 1,
+            return uv_write(new uv_write_t, handle<HANDLE_T>::template get<uv_stream_t>(), &bufs, 1,
                 [](uv_write_t* req, int status)
             {
                 std::unique_ptr<uv_write_t> reqHolder(req);

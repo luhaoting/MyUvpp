@@ -107,6 +107,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
         if (!error)
         {
             //TODO
+            client_conn->on_write_finished();
         }
         else
         {
@@ -114,6 +115,31 @@ void CSimpleSvr::on_new_connected(uv::Error state)
             client_conn->m_tcphandel.close(close_cb);
         }
     };
+
+    auto do_write = [&](const char* buff, size_t len)
+    {
+        client_conn->m_tcphandel.write(buff, len, write_cb);
+    };
+
+    client_conn->set_write_cb(do_write);//client设置自己的写事件
+
+
+    auto read_cb = [&](const char *buff, ssize_t len) 
+    {
+        if (len < 0)
+        {
+            cerr << "TCP client read error: ID = " << client_conn->m_id << std::endl;
+            client_conn->m_tcphandel.close(close_cb);
+        }
+        else
+        {
+            std::string msg;
+            msg.append(buff, len);
+            G_LOG() << "client ID = " << client_conn->m_id << "recv [" << msg << "]" << std::endl;
+        }
+    };
+
+    client_conn->set_read_cb(read_cb);
 }
 
 int CSimpleSvr::AllocID()

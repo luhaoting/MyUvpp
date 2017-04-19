@@ -44,15 +44,48 @@ std::ostream& G_LOG()
     return std::cout;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//这个类其实可以 被继承实现不同的 write 和 read
+//////////////////////////////////////////////////////////////////////////
 class ClientCtx
 {
+    typedef std::function<void(const char* buf, size_t len)> do_write_t;
+    typedef std::function<void(const char* buf, size_t len)> do_read_t;
+
 public:
     ClientCtx(uv::Loop& loop)
         :m_tcphandel(loop)
     {}
 
+    void on_write_finished()
+    {
+        //TODO
+        G_LOG() << "Client[" << m_id << "] write finished!" << std::endl;
+    }
+
+    inline void write(const char* buf, size_t len)
+    {
+        m_write_cb(buf, len);
+    }
+    inline void read(const char* buf, size_t len)
+    {
+        m_read_cb(buf, len);
+    }
+    inline void set_write_cb(do_write_t cb)
+    {
+        m_write_cb = cb;
+    }
+    inline void set_read_cb(do_read_t cb)
+    {
+        m_read_cb = cb;
+    }
+
     ID m_id;
     uv::Tcp m_tcphandel;
+
+private:
+    do_write_t m_write_cb;
+    do_read_t m_read_cb;
 };
 
 class CSimpleSvr
@@ -64,6 +97,7 @@ public:
     {
 
     }
+
     virtual ~CSimpleSvr() = default;
 
     void start(std::string& strIp, int nPort);
