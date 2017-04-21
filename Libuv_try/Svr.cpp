@@ -55,8 +55,10 @@ void Gate::on_new_connection(uv::Error error)
     );
 }
 
-
-
+std::ostream& G_LOG()
+{
+    return std::cout;
+}
 
 
 

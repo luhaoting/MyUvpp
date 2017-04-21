@@ -21,7 +21,7 @@
 #include "timer.hpp"
 #include "tcp.hpp"
 
-#define uv_work 1
+#define mysvr 1
 
 #if uv_work
 static void PrintPoint(uv_timer_t* t)
@@ -291,5 +291,124 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+#endif
+
+#if mysvr
+#include "Svr.hpp"
+#define  myclt
+#ifdef myclt
+// int main(int argc, char* argv[])
+// {
+//     uv::Loop loop;
+//     CSimpleClt clt(loop);
+//     bool ret = clt.Connect("112.168.17.2", 13134);
+//     G_LOG() << "connected ret = " << (ret ? "true" : "false") << std::endl;
+//     system("pause");
+// }
+#endif // myclt
+// 
+// int main(int argc, char* argv[])
+// {
+//     uv::Loop loop;
+//     CSimpleSvr svr(loop);
+//     loop.run();
+//     svr.start(std::string("127.0.0.1"), 13134);
+// }
+
+
+#include <uv.h>
+uv_loop_t *loop = uv_default_loop();
+
+void on_new_connection(uv_stream_t *server, int status) {
+    if (status) 
+    {
+        
+        std::cout << Error(status).str() << std::endl;
+        return;
+    }
+
+    auto alloc_cb = [](uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf)
+    {
+
+        *buf = uv_buf_init(new char[suggested_size], suggested_size);
+    };
+
+    auto read_cb = [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
+    {
+        std::string str;
+        str.append(buf->base, nread);
+        std::cout << str << std::endl;
+    };
+
+    uv_tcp_t *client = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
+    uv_tcp_init(loop, client);
+    if (uv_accept(server, (uv_stream_t*)client) == 0) 
+    {
+        uv_read_start((uv_stream_t*)client, alloc_cb, read_cb);
+    }
+    else 
+    {
+        uv_close((uv_handle_t*)client, NULL);
+    }
+}
+
+int main()
+{
+    uv_tcp_t server;
+    uv_tcp_init(loop, &server);
+
+    struct sockaddr_in bind_addr;
+    int ret = uv_ip4_addr("127.0.0.1", 95527, &bind_addr);
+    ret = uv_tcp_bind(&server, reinterpret_cast<sockaddr*>(&bind_addr), 0);
+    ret = uv_listen((uv_stream_t*)&server, 128, on_new_connection);
+    if (ret < 0) {
+        fprintf(stderr, "Listen error %s\n", Error(ret));
+        return 1;
+    }
+    uv_run(loop, UV_RUN_DEFAULT);
+    system("pause");
+}
+
+
+typedef struct write_req_t
+{
+    uv_write_t req;
+    uv_buf_t buf;
+}write_req_t;
+
+void on_connect(uv_connect_t* req, int status)
+{
+    if (status)
+    {
+        std::cout << Error(status).str() << std::endl;
+    }
+    std::string msg = "i have connected !";
+    write_req_t* wq = (write_req_t*)malloc(sizeof(write_req_t));
+    uv_write(&wq->req, req->handle, &wq->buf, 1, 
+        [](uv_write_t* req, int status) 
+    {
+        write_req_t *wr;
+        wr = (write_req_t*)req;
+        free(wr->buf.base);
+        free(wr);
+    });
+}
+
+// int main(int argc, char* argv[])
+// {
+//     uv_tcp_t socket;
+//     uv_tcp_init(loop, &socket);
+// 
+//     uv_connect_t connect;
+// 
+//     struct sockaddr_in dest;
+//     int ret = uv_ip4_addr("127.0.0.1", 95527, &dest);
+// 
+//     ret = uv_tcp_connect(&connect, &socket, (const struct sockaddr*)(&dest), on_connect);
+// 
+//     ret = uv_run(loop, UV_RUN_DEFAULT);
+//     system("pause");
+// }
 
 #endif

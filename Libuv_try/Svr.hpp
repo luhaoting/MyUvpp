@@ -39,10 +39,7 @@ private:
 
 const std::string g_strIp = "127.0.0.1";
 const int g_nPort = 49527;
-std::ostream& G_LOG()
-{
-    return std::cout;
-}
+std::ostream& G_LOG();
 
 //////////////////////////////////////////////////////////////////////////
 //这个类其实可以 被继承实现不同的 write 和 read
@@ -112,5 +109,25 @@ private:
 
 class CSimpleClt
 {
+public:
+    CSimpleClt(uv::Loop& loop)
+        :m_rLoop(loop),
+        m_MyHandle(m_rLoop)
+    {
+    }
 
+    bool Connect(const string& strIp, int nProt)
+    {
+        return m_MyHandle.connect(strIp, nProt, 
+            [this](uv::Error state) 
+        {
+            m_MyHandle.write("i m client", [](uv::Error state) {});
+        }
+        );
+        m_rLoop.run();
+    }
+
+private:
+    uv::Loop& m_rLoop;
+    uv::Tcp m_MyHandle;
 };
