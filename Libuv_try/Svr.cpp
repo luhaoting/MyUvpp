@@ -10,10 +10,8 @@ Gate::~Gate()
 {
 }
 
-
 bool Gate::listen(const int nPort)
 {
-
     m_listener->listen(std::bind(&Gate::on_new_connection, this, placeholders::_1));
     //this作为参数
     // std::bind  在绑定成员函数是，需要指明调用者
@@ -54,18 +52,17 @@ void Gate::on_new_connection(uv::Error error)
     }
     );
 }
-
+//////////////////////////////////////////////////////////////////////////
 std::ostream& G_LOG()
 {
     return std::cout;
 }
 
-
-
 void CSimpleSvr::start(std::string& strIp, int nPort)
 {
     m_SvrHandle.bind(strIp, nPort);
     m_SvrHandle.listen(std::bind(&CSimpleSvr::on_new_connected, this, placeholders::_1), 128);
+    m_rLoop.run();
 }
 
 void CSimpleSvr::on_new_connected(uv::Error state)
@@ -81,14 +78,14 @@ void CSimpleSvr::on_new_connected(uv::Error state)
     if (m_SvrHandle.accept(client_conn->m_tcphandel))
     {
         //init client from accept
-        client_conn->m_id = AllocID();
-        m_all_Client.insert(std::pair<ID, std::unique_ptr<ClientCtx>>(client_conn->m_id, move(client_conn)));
+        client_conn->m_id = alloc_client_id();
     }
     else
     {
         G_LOG() << "Client Accept Error" << std::endl;
         return;
     }
+
     /*
     [var]表示值传递捕捉var
     [=]值传递捕获父作用域中所有的变量。
@@ -96,11 +93,11 @@ void CSimpleSvr::on_new_connected(uv::Error state)
     [&]引用方式捕获父作用域中所有的变量。
     [this]值传递捕获当前的this指针。
     */
-    ID clientid = client_conn->m_id;
-    auto close_cb = [this, clientid]()
+    ID client_id = client_conn->m_id;
+    auto close_cb = [this, client_id]()
     {
-        m_all_Client.erase(clientid);
-    };//这个写法是会产生clientid个临时变量
+        m_all_Client.erase(client_id);
+    };
 
     client_conn->m_tcphandel.close(close_cb);//client 关闭的时候 去除自己在服务器的句柄
 
@@ -123,9 +120,6 @@ void CSimpleSvr::on_new_connected(uv::Error state)
         client_conn->m_tcphandel.write(buff, len, write_cb);
     };
 
-    client_conn->set_write_cb(do_write);//client设置自己的写事件
-
-
     auto read_cb = [&](const char *buff, ssize_t len) 
     {
         if (len < 0)
@@ -141,11 +135,21 @@ void CSimpleSvr::on_new_connected(uv::Error state)
         }
     };
 
+    client_conn->set_write_cb(do_write);//client设置自己的写事件
     client_conn->set_read_cb(read_cb);
+
+    m_all_Client.insert(std::pair<ID, std::unique_ptr<ClientCtx>>(client_conn->m_id, move(client_conn)));
 }
 
-int CSimpleSvr::AllocID()
+int CSimpleSvr::alloc_client_id()
 {
     static int i = 0;
     return i++;
+}
+
+
+void CSimpleSvr::start_tread(void* self)
+{
+    CSimpleSvr* svr = (CSimpleSvr*)self;
+    svr->m_rLoop.run();
 }

@@ -225,3 +225,17 @@ int main(int argc, char* argv[])
 }
 
 #endif
+
+#if classsvr 
+#include "Svr.hpp"
+
+int main(int argc, char* argv[])
+{
+    uv::Loop base;
+    CSimpleSvr Svr(base);
+    
+    Svr.start(string("127.0.0.1"), 95527);
+    return 0;
+}
+
+#endif
