@@ -44,6 +44,9 @@
     <ClCompile Include="test_tcpclient.cpp">
       <Filter>源文件\reference</Filter>
     </ClCompile>
+    <ClCompile Include="TcpConn.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\uvpp\tcp.hpp">
@@ -104,6 +107,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Svr.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpConn.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

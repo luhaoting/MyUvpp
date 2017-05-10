@@ -23,6 +23,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Svr.cpp" />
     <ClCompile Include="tcpclient.cpp" />
+    <ClCompile Include="TcpConn.cpp" />
     <ClCompile Include="tcpserver.cpp" />
     <ClCompile Include="test_tcpclient.cpp" />
     <ClCompile Include="test_tcpclient_reconnect.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="ring_buffer.hpp" />
     <ClInclude Include="Svr.hpp" />
     <ClInclude Include="tcpclient.h" />
+    <ClInclude Include="TcpConn.h" />
     <ClInclude Include="tcpserver.h" />
     <ClInclude Include="tcpserverprotocolprocess.h" />
     <ClInclude Include="thread_uv.h" />

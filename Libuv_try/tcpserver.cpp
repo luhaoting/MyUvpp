@@ -580,8 +580,10 @@ void AfterRecv(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf)
 {
     TcpClientCtx* theclass = (TcpClientCtx*)handle->data;
     assert(theclass);
-    if (nread < 0) {/* Error or EOF */
-        if (nread == UV_EOF) {
+    if (nread < 0) 
+    {/* Error or EOF */
+        if (nread == UV_EOF) 
+        {
             fprintf(stdout, "client(%d)eof\n", theclass->clientid);
             //LOGW("client(" << theclass->clientid << ")eof");
         } else if (nread == UV_ECONNRESET) {
@@ -594,7 +596,9 @@ void AfterRecv(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf)
         AcceptClient* acceptclient = (AcceptClient*)theclass->parent_acceptclient;
         acceptclient->Close();
         return;
-    } else if (0 == nread)  {/* Everything OK, but nothing read. */
+    } 
+    else if (0 == nread)  
+    {/* Everything OK, but nothing read. */
 
     } else {
         theclass->packet_->recvdata((const unsigned char*)buf->base, nread);

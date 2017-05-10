@@ -85,15 +85,19 @@ private:
     do_read_t m_read_cb;
 };
 
+#include "TcpConn.h"
 
-class CSimpleSvr
+class CSimpleSvr : public TcpConn
 {
 public:
     CSimpleSvr(uv::Loop& loop)
-        :m_rLoop(loop),
-        m_SvrHandle(loop)
-    {}
+        :TcpConn(loop)
+    {
 
+    }
+
+    CSimpleSvr(const CSimpleSvr&) = delete;
+    CSimpleSvr& operator = (const CSimpleSvr&) = delete;
     virtual ~CSimpleSvr() = default;
 
     void start(std::string& strIp, int nPort);
@@ -101,11 +105,7 @@ public:
     int alloc_client_id();
 
 private:
-    void start_tread(void *self);
-private:
     std::map<ID, std::unique_ptr<ClientCtx> >m_all_Client;
-    uv::Loop& m_rLoop;
-    uv::Tcp m_SvrHandle;
 };
 
 class CSimpleClt

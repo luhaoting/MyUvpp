@@ -60,8 +60,8 @@ std::ostream& G_LOG()
 
 void CSimpleSvr::start(std::string& strIp, int nPort)
 {
-    m_SvrHandle.bind(strIp, nPort);
-    m_SvrHandle.listen(std::bind(&CSimpleSvr::on_new_connected, this, placeholders::_1), 128);
+    m_handle.bind(strIp, nPort);
+    m_handle.listen(std::bind(&CSimpleSvr::on_new_connected, this, placeholders::_1), 128);
     m_rLoop.run();
 }
 
@@ -75,7 +75,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
     //alloc client
     auto client_conn = std::make_unique<ClientCtx>(m_rLoop);
 
-    if (m_SvrHandle.accept(client_conn->m_tcphandel))
+    if (m_handle.accept(client_conn->m_tcphandel))
     {
         //init client from accept
         client_conn->m_id = alloc_client_id();
@@ -145,11 +145,4 @@ int CSimpleSvr::alloc_client_id()
 {
     static int i = 0;
     return i++;
-}
-
-
-void CSimpleSvr::start_tread(void* self)
-{
-    CSimpleSvr* svr = (CSimpleSvr*)self;
-    svr->m_rLoop.run();
 }
