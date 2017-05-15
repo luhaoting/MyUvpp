@@ -27,5 +27,13 @@ void TcpConn::OnRecv(const char *buff, ssize_t len)
 
 void TcpConn::SendTo(std::string& strMsg)
 {
-    m_handle.write(strMsg.c_str(), strMsg.length(),nullptr);
+	m_handle.write(strMsg.c_str(), strMsg.length(), std::bind(&TcpConn::OnWriteFinished, this, std::placeholders::_1));
+}
+
+void TcpConn::OnWriteFinished(uv::Error error)
+{
+	if (!error)
+	{
+		std::cout << error.str() << std::endl;
+	}
 }

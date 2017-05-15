@@ -4,6 +4,8 @@
 #include <tcp.hpp>
 #include <iostream>
 
+using ID = int64_t;
+
 class TcpConn
 {
 public:
@@ -12,9 +14,15 @@ public:
 
     virtual void OnRecv(const char *buff, ssize_t len);
     virtual void SendTo(std::string& msg);
+protected:
+	virtual void OnWriteFinished(uv::Error error);
 
 protected:
-    uv::Loop& m_rLoop;
-    uv::Tcp m_handle;
+    
+
+public:
+	uv::Loop& m_rLoop;
+	uv::Tcp m_handle;
+	ID m_id;
 };
 
