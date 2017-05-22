@@ -1,19 +1,24 @@
 #include "TcpConn.h"
 
-TcpConn::TcpConn(uv::Loop& loop) 
+TcpConn::TcpConn(uv::Loop& loop)
     : m_rLoop(loop),
-    m_handle(loop)
+    m_handle(loop),
+    mf_close_cb([] {})
 {
-    m_handle.read_start(std::bind(&TcpConn::OnRecv, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 TcpConn::~TcpConn()
 {
 }
 
+void TcpConn::SetReadCb()
+{
+    m_handle.read_start(std::bind(&TcpConn::OnRecv, this, std::placeholders::_1, std::placeholders::_2));
+}
+
 void TcpConn::OnRecv(const char *buff, ssize_t len)
 {
-    while (true)
+    if (len > 0)
     {
         //这里应有解包
         std::string str;
@@ -23,17 +28,21 @@ void TcpConn::OnRecv(const char *buff, ssize_t len)
         std::cout << str << std::endl;
         return;
     }
+    else
+    {
+        m_handle.close(mf_close_cb);
+    }
 }
 
 void TcpConn::SendTo(std::string& strMsg)
 {
-	m_handle.write(strMsg.c_str(), strMsg.length(), std::bind(&TcpConn::OnWriteFinished, this, std::placeholders::_1));
+    m_handle.write(strMsg.c_str(), strMsg.length(), std::bind(&TcpConn::OnWriteFinished, this, std::placeholders::_1));
 }
 
 void TcpConn::OnWriteFinished(uv::Error error)
 {
-	if (!error)
-	{
-		std::cout << error.str() << std::endl;
-	}
+    if (!error)
+    {
+        std::cout << error.str() << std::endl;
+    }
 }

@@ -90,7 +90,7 @@ namespace uv
             );
         }
 
-    protected:
+    public:
         handle_T* m_uv_handle;
         bool m_will_close;
     };

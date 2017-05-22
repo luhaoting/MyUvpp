@@ -21,7 +21,7 @@
 #include "timer.hpp"
 #include "tcp.hpp"
 
-#define mysvr 1
+#define classsvr 1
 
 #if uv_work
 static void PrintPoint(uv_timer_t* t)

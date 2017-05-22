@@ -1,4 +1,6 @@
 #include "Svr.hpp"
+#include <uv.h>
+#include "handle.hpp"
 
 //////////////////////////////////////////////////////////////////////////
 std::ostream& G_LOG()
@@ -32,6 +34,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
     {
         //init client from accept
         client_conn->m_id = alloc_client_id();
+        client_conn->SetReadCb();
     }
     else
     {
@@ -52,7 +55,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
         m_all_Client.erase(client_id);
     };
 
-    client_conn->m_handle.close(close_cb);//client 关闭的时候 去除自己在服务器的句柄
+    client_conn->SetCloseCb(close_cb);
 
     m_all_Client.insert(std::pair<ID, std::unique_ptr<TcpConn>>(client_conn->m_id, move(client_conn)));
 }
