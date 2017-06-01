@@ -14,27 +14,24 @@ public:
 
     //must call after accpet
     virtual void SetReadCb();
-    inline void SetCloseCb(std::function<void()> close_cb)
-    {
-        mf_close_cb = close_cb;
-    }
+    inline void SetCloseCb(std::function<void()> close_cb) { mf_close_cb = close_cb; }
 
     virtual void OnRecv(const char *buff, ssize_t len);
     virtual void SendTo(std::string& msg);
-    
-protected:
-	virtual void OnWriteFinished(uv::Error error);
+
+    virtual void ConnectTo(std::string& strIp, const int nPort);
 
 protected:
-    
+    virtual void OnWriteFinished(uv::Error error);
 
 public:
     ID m_id;
-    uv::Loop& m_rLoop;
     uv::Tcp m_handle;
 
+protected:
+    uv::Loop& m_rLoop;
+
 private:
-	
     std::function<void()> mf_close_cb;
 };
 

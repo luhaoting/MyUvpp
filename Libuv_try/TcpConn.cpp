@@ -39,6 +39,11 @@ void TcpConn::SendTo(std::string& strMsg)
     m_handle.write(strMsg.c_str(), strMsg.length(), std::bind(&TcpConn::OnWriteFinished, this, std::placeholders::_1));
 }
 
+void TcpConn::ConnectTo(std::string & strIp, const int nPort)
+{
+    m_handle.connect(strIp, nPort, nullptr);
+}
+
 void TcpConn::OnWriteFinished(uv::Error error)
 {
     if (!error)

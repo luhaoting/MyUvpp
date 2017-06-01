@@ -1,17 +1,12 @@
 #include "Client.h"
 
-Client::Client() :
-    m_base(new Loop()),
-    m_handle(new Tcp(*m_base))
-{
-}
-
-Client::~Client()
+Client::Client(uv::Loop& loop) 
+    :TcpConn(loop)
 {
 }
 
 
-void Client::ConnectTo(string strIp, int nPort)
+void Client::Start(string strIp, int nPort)
 {
 //     TRY
 // 
@@ -20,8 +15,7 @@ void Client::ConnectTo(string strIp, int nPort)
 //             return false;
 //         }
 
-    m_handle->connect(strIp, nPort, std::bind(&Client::onConnected, this, placeholders::_1));
-
+//    m_handle->connect(strIp, nPort, std::bind(&Client::onConnected, this, placeholders::_1));
 }
 
 void Client::onConnected(Error error)
@@ -34,7 +28,7 @@ void Client::onConnected(Error error)
     //     bufferevent_priority_set(m_pevBuff, 2);//3 is middle pri, so 2 is handle first than 3
     //     return true;
 
-    m_handle->read_start(std::bind(&Client::onRecv, this, placeholders::_1, placeholders::_2));
+//    m_handle->read_start(std::bind(&Client::onRecv, this, placeholders::_1, placeholders::_2));
 }
 
 
