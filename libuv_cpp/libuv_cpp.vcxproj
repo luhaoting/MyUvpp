@@ -25,8 +25,9 @@
     <ClCompile Include="..\reference\test_tcpclient_reconnect.cpp" />
     <ClCompile Include="..\reference\test_tcpserver.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="EchoSvrConn.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Svr.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="TcpConn.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +50,8 @@
     <ClInclude Include="..\uvpp\timer.hpp" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Connection.hpp" />
-    <ClInclude Include="Svr.hpp" />
+    <ClInclude Include="EchoSvrConn.h" />
+    <ClInclude Include="Server.hpp" />
     <ClInclude Include="TcpConn.h" />
     <ClInclude Include="Uti\ring_buffer.hpp" />
   </ItemGroup>

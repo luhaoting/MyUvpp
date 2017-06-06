@@ -3,8 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Svr.cpp" />
-    <ClCompile Include="TcpConn.cpp" />
     <ClCompile Include="..\reference\tcpserver.cpp">
       <Filter>reference</Filter>
     </ClCompile>
@@ -20,13 +18,17 @@
     <ClCompile Include="..\reference\tcpclient.cpp">
       <Filter>reference</Filter>
     </ClCompile>
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="TcpConn.cpp">
+      <Filter>TcpConn</Filter>
+    </ClCompile>
+    <ClCompile Include="EchoSvrConn.cpp">
+      <Filter>TcpConn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\uvpp\tcp.hpp" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Connection.hpp" />
-    <ClInclude Include="Svr.hpp" />
-    <ClInclude Include="TcpConn.h" />
     <ClInclude Include="..\uvpp\loop.hpp">
       <Filter>uvpp</Filter>
     </ClInclude>
@@ -78,6 +80,16 @@
     <ClInclude Include="..\uvpp\stream.hpp">
       <Filter>uvpp</Filter>
     </ClInclude>
+    <ClInclude Include="Server.hpp" />
+    <ClInclude Include="TcpConn.h">
+      <Filter>TcpConn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uvpp\tcp.hpp">
+      <Filter>uvpp</Filter>
+    </ClInclude>
+    <ClInclude Include="EchoSvrConn.h">
+      <Filter>TcpConn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="uvpp">
@@ -94,6 +106,9 @@
     </Filter>
     <Filter Include="Doc">
       <UniqueIdentifier>{dffc23ff-827f-4bd2-a955-66ac0569f82d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TcpConn">
+      <UniqueIdentifier>{a6bb8873-56a1-4f1a-ad5c-d11469584291}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

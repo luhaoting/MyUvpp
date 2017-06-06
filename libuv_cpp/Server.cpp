@@ -1,4 +1,4 @@
-#include "Svr.hpp"
+#include "Server.hpp"
 #include <uv.h>
 #include "handle.hpp"
 
@@ -9,7 +9,7 @@ std::ostream& G_LOG()
 }
 
 CSimpleSvr::CSimpleSvr(uv::Loop& loop)
-	:TcpConn(loop)
+    :TcpConn(loop)
 {
 }
 
@@ -28,7 +28,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
     }
 
     //alloc client
-    auto client_conn = std::make_unique<TcpConn>(m_rLoop);
+    auto client_conn = std::make_unique<ClientCtx>(m_rLoop);
 
     if (m_handle.accept(client_conn->m_handle))
     {
@@ -57,11 +57,29 @@ void CSimpleSvr::on_new_connected(uv::Error state)
 
     client_conn->SetCloseCb(close_cb);
 
-    m_all_Client.insert(std::pair<ID, std::unique_ptr<TcpConn>>(client_conn->m_id, move(client_conn)));
+    m_all_Client.insert(std::pair<ID, std::unique_ptr<ClientCtx>>(client_conn->m_id, move(client_conn)));
 }
 
 int CSimpleSvr::alloc_client_id()
 {
     static int i = 0;
     return i++;
+}
+
+void CSimpleSvr::OnRecv(const char * buff, ssize_t len)
+{
+    if (len > 0)
+    {
+        //这里应有解包
+        std::string str;
+        str.append(buff, len);
+
+        //free(buff);
+        std::cout << "[Server recv data]:" << str << std::endl;
+        return;
+    }
+    else
+    {
+        m_handle.close(mf_close_cb);
+    }
 }

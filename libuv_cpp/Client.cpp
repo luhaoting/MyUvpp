@@ -8,37 +8,32 @@ Client::Client(uv::Loop& loop)
 
 void Client::Start(string strIp, int nPort)
 {
-//     TRY
-// 
-//         if (!m_pSocket->connectTo(server, unPort))
-//         {
-//             return false;
-//         }
-
-//    m_handle->connect(strIp, nPort, std::bind(&Client::onConnected, this, placeholders::_1));
+    if (!m_handle.connect(strIp, nPort, std::bind(&Client::OnConnected, this, placeholders::_1)))
+    {
+        return;
+    }
 }
 
-void Client::onConnected(Error error)
+void Client::OnConnected(Error error)
 {
-    //     m_pSocket->setnonblock();
-    // 
-    //     m_pevBuff = bufferevent_new(m_pSocket->m_nSocket, OnReceive, NULL, OnEv, this);
-    //     bufferevent_base_set(m_pEventBase, m_pevBuff);
-    //     bufferevent_enable(m_pevBuff, EV_READ | EV_PERSIST);
-    //     bufferevent_priority_set(m_pevBuff, 2);//3 is middle pri, so 2 is handle first than 3
-    //     return true;
-
-//    m_handle->read_start(std::bind(&Client::onRecv, this, placeholders::_1, placeholders::_2));
+    m_handle.read_start(std::bind(&Client::OnRecv, this, placeholders::_1, placeholders::_2));
 }
 
 
 void Client::Send(string data)
 {
-    
+    auto write_cb = [](uv::Error error)
+    {
+        //check is write finished!
+    };
+
+    m_handle.write(data, write_cb);
 }
 
-void Client::onRecv(const char* buff, size_t len)
+void Client::OnRecv(const char* buff, size_t len)
 {
-
+    string msg;
+    msg.append(buff, len);
+    std::cout << "[Recv] :" << msg << std::endl;
 }
 

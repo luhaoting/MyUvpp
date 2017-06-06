@@ -16,7 +16,7 @@ public:
     virtual void SetReadCb();
     inline void SetCloseCb(std::function<void()> close_cb) { mf_close_cb = close_cb; }
 
-    virtual void OnRecv(const char *buff, ssize_t len);
+    virtual void OnRecv(const char *buff, ssize_t len) = 0;
     virtual void SendTo(std::string& msg);
 
     virtual void ConnectTo(std::string& strIp, const int nPort);
@@ -30,8 +30,5 @@ public:
 
 protected:
     uv::Loop& m_rLoop;
-
-private:
     std::function<void()> mf_close_cb;
 };
-
