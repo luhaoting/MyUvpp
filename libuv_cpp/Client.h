@@ -26,5 +26,5 @@ public:
 
 protected:
     virtual void OnConnected(Error error);
-    virtual void OnRecv(const char* buff, size_t len);
+    virtual void OnRecv(const char* buff, ssize_t len);
 };

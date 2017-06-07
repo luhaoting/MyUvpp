@@ -245,32 +245,12 @@ int main(int argc, char* argv[])
 #include <functional>
 #include "Client.h"
 
-void thread_work(Client& client)
-{
-    while (true)
-    {
-        std::string msg;
-        std::cin >> msg;
-
-        if (msg == "exit")
-        {
-            client.Close();
-            break;
-        }
-
-        client.Send(msg);
-    }
-}
 
 int main(int argc, char* argv[])
 {
     uv::Loop base;
     Client client(base);
-    std::thread tA(thread_work, client); //compile error 
-                                         //错误	C2661	“std::tuple<void(__cdecl *)(Client), Client>::tuple”: 没有重载函数接受 2 个参数
-                                         //why?
-    client.Start(string("127.0.0.1"), 95527);
-    tA.join();
+    client.Start("127.0.0.1", 95527);
 }
 
 #endif

@@ -28,7 +28,7 @@ void TcpConn::ConnectTo(std::string & strIp, const int nPort)
 
 void TcpConn::OnWriteFinished(uv::Error error)
 {
-    if (!error)
+    if (error)
     {
         std::cout << error.str() << std::endl;
     }

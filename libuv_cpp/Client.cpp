@@ -24,16 +24,20 @@ void Client::Send(string data)
 {
     auto write_cb = [](uv::Error error)
     {
-        //check is write finished!
+        cout << "send finished!" << endl;
     };
 
     m_handle.write(data, write_cb);
 }
 
-void Client::OnRecv(const char* buff, size_t len)
+void Client::OnRecv(const char* buff, ssize_t len)
 {
     string msg;
     msg.append(buff, len);
     std::cout << "[Recv] :" << msg << std::endl;
+
+    cin >> msg;
+
+    Send(msg);
 }
 

@@ -57,6 +57,7 @@ void CSimpleSvr::on_new_connected(uv::Error state)
 
     client_conn->SetCloseCb(close_cb);
 
+    client_conn->SendTo(string("Connected!"));
     m_all_Client.insert(std::pair<ID, std::unique_ptr<ClientCtx>>(client_conn->m_id, move(client_conn)));
 }
 
