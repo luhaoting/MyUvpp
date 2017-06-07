@@ -22,7 +22,6 @@ public:
 
 public:
     void Start(string strIp, int nPort);
-    void Send(string data);
 
 protected:
     virtual void OnConnected(Error error);

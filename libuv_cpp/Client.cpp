@@ -19,17 +19,6 @@ void Client::OnConnected(Error error)
     m_handle.read_start(std::bind(&Client::OnRecv, this, placeholders::_1, placeholders::_2));
 }
 
-
-void Client::Send(string data)
-{
-    auto write_cb = [](uv::Error error)
-    {
-        cout << "send finished!" << endl;
-    };
-
-    m_handle.write(data, write_cb);
-}
-
 void Client::OnRecv(const char* buff, ssize_t len)
 {
     string msg;
@@ -38,6 +27,6 @@ void Client::OnRecv(const char* buff, ssize_t len)
 
     cin >> msg;
 
-    Send(msg);
+    SendTo(msg);
 }
 

@@ -97,14 +97,11 @@ int main()
 }
 #endif
 
-
-
 typedef struct write_req_t
 {
     uv_write_t req;
     uv_buf_t buf;
 }write_req_t;
-
 
 #if mysvr
 #include <uv.h>
@@ -245,12 +242,30 @@ int main(int argc, char* argv[])
 #include <functional>
 #include "Client.h"
 
+void sendmsg_thread(Client* client)
+{
+    std::cout << "input any thing to Server!" << std::endl;
+    while (1)
+    {
+        string msg = "";
+        std::cin >> msg;
+
+        if(msg == "exit")
+        {
+            break;
+        }
+
+        client->SendTo(msg); //crash when client be closed
+    }
+}
 
 int main(int argc, char* argv[])
 {
     uv::Loop base;
     Client client(base);
+    std::thread work_1(sendmsg_thread, &client);
     client.Start("127.0.0.1", 95527);
+    work_1.join();
 }
 
 #endif
